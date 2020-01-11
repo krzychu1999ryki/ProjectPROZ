@@ -3,11 +3,14 @@ package model;
 public class Player {
     private double positionX;
     private double positionY;
-    private int hitPoints;
+    private double hitPoints;
     private double speedX;
     private double speedY;
     private double maxSpeed;
     private double acceleration;
+    private double bulletCoolDown;
+
+    private final static double BULLET_SPEED = 1;
 
     public Player(){
         positionX = 500;
@@ -17,9 +20,10 @@ public class Player {
         speedY = 0;
         maxSpeed = 10;
         acceleration = 0.5;
+        bulletCoolDown = 20;
     }
 
-    public Player(int x,int y,int hp, int maxSpeed, int acceleration){
+    public Player(double x,double y,double hp, double maxSpeed, double acceleration, double bulletCoolDown){
         this.positionX = x;
         this.positionY = y;
         this.hitPoints = hp;
@@ -27,6 +31,7 @@ public class Player {
         speedY = 0;
         this.maxSpeed = maxSpeed;
         this.acceleration = acceleration;
+        this.bulletCoolDown = bulletCoolDown;
     }
 
     public void setPositionX(double x) {
@@ -67,5 +72,13 @@ public class Player {
 
     public double getMaxSpeed() {
         return maxSpeed;
+    }
+
+    public static double getBulletSpeed() {
+        return BULLET_SPEED;
+    }
+
+    public double getBulletCoolDown() {
+        return bulletCoolDown;
     }
 }

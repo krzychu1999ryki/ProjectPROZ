@@ -1,7 +1,6 @@
 package view;
 
 import controller.GameController;
-import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -17,10 +16,14 @@ public class GameViewManager {
     private Scene gameScene;
     private Stage gameStage;
     private ImageView playerImage;
+    private ImageView playersBulletImage;
+
     private GameController gameController;
 
     private static final String BACKGROUND_1 = "view/resources/ground_01.png";
     private static final String PLAYER_STOP = "view/resources/player_stop.png";
+    private static final String PLAYERS_BULLET = "view/resources/meteorBrown_tiny1.png";
+
 
     private static final int GAME_WIDTH = 800;
     private static final int GAME_HEIGHT = 600;
@@ -31,6 +34,11 @@ public class GameViewManager {
     private boolean isRightKeyPressed;
     private boolean isUpKeyPressed;
     private boolean isDownKeyPressed;
+    private boolean isWKeyPressed;
+    private boolean isAKeyPressed;
+    private boolean isSKeyPressed;
+    private boolean isDKeyPressed;
+
 
 
     public GameViewManager(){
@@ -73,6 +81,14 @@ public class GameViewManager {
                     isDownKeyPressed = true;
                 } else if(keyEvent.getCode() == KeyCode.UP){
                     isUpKeyPressed = true;
+                } else if(keyEvent.getCode() == KeyCode.W){
+                    isWKeyPressed = true;
+                } else if(keyEvent.getCode() == KeyCode.A){
+                    isAKeyPressed = true;
+                } else if(keyEvent.getCode() == KeyCode.S){
+                    isSKeyPressed = true;
+                } else if(keyEvent.getCode() == KeyCode.D){
+                    isDKeyPressed = true;
                 }
             }
         });
@@ -88,10 +104,42 @@ public class GameViewManager {
                     isDownKeyPressed = false;
                 } else if (keyEvent.getCode() == KeyCode.UP) {
                     isUpKeyPressed = false;
+                } else if (keyEvent.getCode() == KeyCode.A) {
+                    isAKeyPressed = false;
+                } else if (keyEvent.getCode() == KeyCode.W) {
+                    isWKeyPressed = false;
+                } else if (keyEvent.getCode() == KeyCode.S) {
+                    isSKeyPressed = false;
+                }else if (keyEvent.getCode() == KeyCode.D) {
+                    isDKeyPressed = false;
                 }
             }
         });
     };
+
+    public void movePlayer(double x, double y){
+        playerImage.setLayoutX(x);
+        playerImage.setLayoutY(y);
+    }
+
+    private void setBackground(String background){
+        Image backgroundImage = new Image(background, 64, 64, false, true);
+        BackgroundImage newBackgroundImage = new BackgroundImage(backgroundImage,
+                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
+        gamePane.setBackground(new Background(newBackgroundImage));
+    }
+
+    public void createPlayersBullet(double x, double y){
+        playersBulletImage = new ImageView(PLAYERS_BULLET);
+        playersBulletImage.setLayoutY(y);
+        playersBulletImage.setLayoutX(x);
+        gamePane.getChildren().add(playersBulletImage);
+    }
+
+    public void movePlayersBullets(double x, double y){
+        playersBulletImage.setLayoutX(x);
+        playersBulletImage.setLayoutY(y);
+    }
 
     public boolean getLeftPressed(){
         return isLeftKeyPressed;
@@ -125,15 +173,7 @@ public class GameViewManager {
         return PLAYER_HEIGHT;
     }
 
-    public void movePlayer(double x, double y){
-        playerImage.setLayoutX(x);
-        playerImage.setLayoutY(y);
-    }
-
-    private void setBackground(String background){
-        Image backgroundImage = new Image(background, 64, 64, false, true);
-        BackgroundImage newBackgroundImage = new BackgroundImage(backgroundImage,
-                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
-        gamePane.setBackground(new Background(newBackgroundImage));
+    public boolean getAKeyPressed() {
+        return isAKeyPressed;
     }
 }
