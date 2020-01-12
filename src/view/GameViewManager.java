@@ -10,13 +10,17 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class GameViewManager {
     private AnchorPane gamePane;
     private Scene gameScene;
     private Stage gameStage;
     private ImageView playerImage;
-    private ImageView[] playersBulletsImages;
+    //private ImageView[] playersBulletsImages;
+    private List<ImageView> playersBulletsImages;
 
     private GameController gameController;
 
@@ -50,7 +54,8 @@ public class GameViewManager {
         gamePane = new AnchorPane();
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
         gameStage = new Stage();
-        playersBulletsImages = new ImageView[10];
+        //playersBulletsImages = new ImageView[10];
+        playersBulletsImages = new ArrayList<>();
         createPlayer();
         gameStage.setScene(gameScene);
         createKeysListeners();
@@ -131,16 +136,30 @@ public class GameViewManager {
         gamePane.setBackground(new Background(newBackgroundImage));
     }
 
-    public void createPlayersBullet(double x, double y, int number){
-        playersBulletsImages[number] = new ImageView(PLAYERS_BULLET);
-        playersBulletsImages[number].setLayoutY(y);
-        playersBulletsImages[number].setLayoutX(x);
-        gamePane.getChildren().add(playersBulletsImages[number]);
+    public void createPlayersBullet(double x, double y, int number ){
+        playersBulletsImages.add (new ImageView(PLAYERS_BULLET));
+        playersBulletsImages.get(number - 1).setLayoutY(y);
+        playersBulletsImages.get(number - 1).setLayoutX(x);
+        gamePane.getChildren().add(playersBulletsImages.get(number - 1));
+
+
+        //playersBulletsImages[number] = new ImageView(PLAYERS_BULLET);
+        //playersBulletsImages[number].setLayoutY(y);
+        //playersBulletsImages[number].setLayoutX(x);
+        //gamePane.getChildren().add(playersBulletsImages[number]);
     }
 
+    //public void removePlayersBullet(int number, int playersBullets){
+    //    gamePane.getChildren().remove(playersBulletsImages[number]);
+    //    for (int i = number; i < playersBullets - 1; i++){
+    //        playersBulletsImages[i] = playersBulletsImages[i + 1];
+    //    }
+    //    playersBulletsImages[playersBullets - 1] = null;
+    //}
+
     public void movePlayersBullet(double x, double y, int number){
-        playersBulletsImages[number].setLayoutX(x);
-        playersBulletsImages[number].setLayoutY(y);
+        playersBulletsImages.get(number).setLayoutX(x);
+        playersBulletsImages.get(number).setLayoutY(y);
     }
 
     public boolean getLeftPressed(){
@@ -159,21 +178,13 @@ public class GameViewManager {
         return isUpKeyPressed;
     }
 
-    public static int getGameHeight() {
-        return GAME_HEIGHT;
-    }
+    public static int getGameHeight() { return GAME_HEIGHT; }
 
-    public static int getGameWidth() {
-        return GAME_WIDTH;
-    }
+    public static int getGameWidth() { return GAME_WIDTH; }
 
-    public static int getPlayerWidth() {
-        return PLAYER_WIDTH;
-    }
+    public static int getPlayerWidth() { return PLAYER_WIDTH; }
 
-    public static int getPlayerHeight() {
-        return PLAYER_HEIGHT;
-    }
+    public static int getPlayerHeight() { return PLAYER_HEIGHT; }
 
     public boolean getAKeyPressed() {
         return isAKeyPressed;

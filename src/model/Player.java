@@ -18,7 +18,7 @@ public class Player {
         hitPoints = 10;
         speedX = 0;
         speedY = 0;
-        maxSpeed = 10;
+        maxSpeed = 8;
         acceleration = 0.5;
         bulletCoolDown = 20;
     }

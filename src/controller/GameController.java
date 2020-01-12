@@ -5,19 +5,21 @@ import model.Player;
 import model.PlayersBullet;
 import view.GameViewManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameController {
     private AnimationTimer gameTimer;
     private GameViewManager viewManager;
     private Player player;
-    private PlayersBullet[] playersBullets;
-    private int playersBulletsNumber;
+    //private PlayersBullet[] playersBullets;
+    private List<PlayersBullet> playersBullets;
     private double playersBulletCoolDown;
 
 
     public GameController(GameViewManager viewManager){
         this.viewManager = viewManager;
-        this.playersBullets = new PlayersBullet[10];
-        this.playersBulletsNumber = 0;
+        this.playersBullets = new ArrayList<>();
         createGameLoop();
         player = new Player();
         playersBulletCoolDown = 0;
@@ -98,50 +100,48 @@ public class GameController {
                     player.setSpeedY(0);
                 }
 
-                if(viewManager.getAKeyPressed() == true && playersBulletCoolDown == 0 && playersBulletsNumber < 10){
-                    playersBullets[playersBulletsNumber] = new PlayersBullet(player.getPositionX(), player.getPositionY(),
-                            -player.getBulletSpeed(), player.getSpeedY()/2);
-                    viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBulletsNumber);
-                    playersBulletsNumber += 1;
+                if(viewManager.getAKeyPressed() == true && playersBulletCoolDown == 0){
+                    playersBullets.add(new PlayersBullet(player.getPositionX(), player.getPositionY(),
+                            -player.getBulletSpeed(), player.getSpeedY()/2));
+                    viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBullets.size());
                     playersBulletCoolDown = player.getBulletCoolDown();
                 }
 
-                if(viewManager.getWKeyPressed() == true && playersBulletCoolDown == 0 && playersBulletsNumber < 10){
-                    playersBullets[playersBulletsNumber] = new PlayersBullet(player.getPositionX(), player.getPositionY(),
-                            player.getSpeedX()/2, -player.getBulletSpeed());
-                    viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBulletsNumber);
-                    playersBulletsNumber += 1;
+                if(viewManager.getWKeyPressed() == true && playersBulletCoolDown == 0){
+                    playersBullets.add(new PlayersBullet(player.getPositionX(), player.getPositionY(),
+                            player.getSpeedX()/2, -player.getBulletSpeed()));
+                    viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBullets.size());
                     playersBulletCoolDown = player.getBulletCoolDown();
                 }
 
-                if(viewManager.getSKeyPressed() == true && playersBulletCoolDown == 0 && playersBulletsNumber < 10){
-                    playersBullets[playersBulletsNumber] = new PlayersBullet(player.getPositionX(), player.getPositionY(),
-                            player.getSpeedX()/2, player.getBulletSpeed());
-                    viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBulletsNumber);
-                    playersBulletsNumber += 1;
+                if(viewManager.getSKeyPressed() == true && playersBulletCoolDown == 0){
+                    playersBullets.add(new PlayersBullet(player.getPositionX(), player.getPositionY(),
+                            player.getSpeedX()/2, player.getBulletSpeed()));
+                    viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBullets.size());
                     playersBulletCoolDown = player.getBulletCoolDown();
                 }
 
-                if(viewManager.getDKeyPressed() == true && playersBulletCoolDown == 0 && playersBulletsNumber < 10){
-                    playersBullets[playersBulletsNumber] = new PlayersBullet(player.getPositionX(), player.getPositionY(),
-                            player.getBulletSpeed(), player.getSpeedY()/2);
-                    viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBulletsNumber);
-                    playersBulletsNumber += 1;
+                if(viewManager.getDKeyPressed() == true && playersBulletCoolDown == 0){
+                    playersBullets.add(new PlayersBullet(player.getPositionX(), player.getPositionY(),
+                            player.getBulletSpeed(), player.getSpeedY()/2));
+                    viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBullets.size());
                     playersBulletCoolDown = player.getBulletCoolDown();
-                }
-
-                for(int i =0; i < playersBulletsNumber; ++i){
-                    playersBullets[i].setPositionX(playersBullets[i].getPositionX() + playersBullets[i].getSpeedX());
-                    playersBullets[i].setPositionY(playersBullets[i].getPositionY() + playersBullets[i].getSpeedY());
-                    System.out.println(playersBullets[i].getPositionX());
-                    System.out.println(playersBullets[i].getPositionY());
-
                 }
 
                 viewManager.movePlayer(player.getPositionX(),player.getPositionY());
 
-                for(int i = 0; i < playersBulletsNumber; ++i){
-                    viewManager.movePlayersBullet(playersBullets[i].getPositionX(),playersBullets[i].getPositionY(),i);
+                //deleteOutOfScreenBullets();
+
+                for(int i =0; i < playersBullets.size(); ++i){
+                    playersBullets.get(i).setPositionX(playersBullets.get(i).getPositionX() + playersBullets.get(i).getSpeedX());
+                    playersBullets.get(i).setPositionY(playersBullets.get(i).getPositionY() + playersBullets.get(i).getSpeedY());
+                    System.out.println(playersBullets.get(i).getPositionX());
+                    System.out.println(playersBullets.get(i).getPositionY());
+
+                }
+
+                for(int i = 0; i < playersBullets.size(); ++i){
+                    viewManager.movePlayersBullet(playersBullets.get(i).getPositionX(),playersBullets.get(i).getPositionY(),i);
                 }
 
                 if(playersBulletCoolDown != 0){
@@ -152,5 +152,23 @@ public class GameController {
         gameTimer.start();
     }
 
+    //private void deleteOutOfScreenBullets(){
+    //    for(int i = 0; i < playersBulletsNumber; ++i ){
+     //       if(playersBullets[i].getPositionY() < 0 || playersBullets[i].getPositionX() < 0 ||
+     //               playersBullets[i].getPositionX() > viewManager.getGameWidth() ||
+      //              playersBullets[i].getPositionY() > viewManager.getGameHeight()){
+      //          playersBulletsNumber -= 1;
+       //         viewManager.removePlayersBullet(i, playersBulletsNumber);
+      //          for(int a = i; a < playersBulletsNumber - 1; ++a){
+      //          playersBullets[a] = playersBullets[a+1];
+       //         }
+      //          playersBullets[playersBulletsNumber - 1] = null;
+      //          --i;
+      //      }
+      //  }
+
+
+
 
 }
+
