@@ -1,7 +1,7 @@
 package controller;
 
 import javafx.animation.AnimationTimer;
-import model.Player;
+import model.Creature;
 import model.PlayersBullet;
 import view.GameViewManager;
 
@@ -11,16 +11,22 @@ import java.util.List;
 public class GameController {
     private AnimationTimer gameTimer;
     private GameViewManager viewManager;
-    private Player player;
+
+    private Creature player;
     private List<PlayersBullet> playersBullets;
     private double playersBulletCoolDown;
+
+    private List<Creature> enemies;
 
 
     public GameController(GameViewManager viewManager){
         this.viewManager = viewManager;
         this.playersBullets = new ArrayList<>();
         createGameLoop();
-        player = new Player();
+        player = new Creature();
+        enemies = new ArrayList<>();
+        enemies.add(new Creature(100,100,10,0,0,0, 64,64, 28 ));
+        viewManager.createEnemy(100,100);
         playersBulletCoolDown = 0;
     }
 
@@ -139,7 +145,6 @@ public class GameController {
                     playersBullets.get(i).getPositionY() < -20 || playersBullets.get(i).getPositionY() > viewManager.getGameHeight()){
                         playersBullets.remove(i);
                         viewManager.deletePlayersBullet(i);
-                        System.out.println("zabito");
                     }
                 }
 
@@ -147,12 +152,47 @@ public class GameController {
                     viewManager.movePlayersBullet(playersBullets.get(i).getPositionX(),playersBullets.get(i).getPositionY(),i);
                 }
 
+                handlePlayersBulletsCollisions();
+
                 if(playersBulletCoolDown != 0){
                     playersBulletCoolDown -= 1;
                 }
             }
         };
         gameTimer.start();
+    }
+
+    private double calculateDistance(Creature a, Creature b){
+        return Math.sqrt(Math.pow(a.centreX() - b.centreX(), 2) +
+                Math.pow(a.centreY() - b.centreY(), 2)) - (a.getRadius() + b.getRadius());
+    }
+
+    private double calculateDistance(Creature a, PlayersBullet b){
+       return Math.sqrt(Math.pow(a.centreX() - b.centreX(), 2) +
+                Math.pow(a.centreY() - b.centreY(), 2)) - (a.getRadius() + b.getRadius());
+    }
+
+    private void handlePlayersBulletsCollisions(){
+        boolean bulletRemoved = false;
+        for(int i = 0; i < playersBullets.size(); i++){
+            for(int a = 0; a < enemies.size(); a++){
+                if(calculateDistance(enemies.get(a), playersBullets.get(i)) <= 0){
+                    playersBullets.remove(i);
+                    viewManager.deletePlayersBullet(i);
+                    enemies.get(a).setHitPoints(enemies.get(a).getHitPoints() - player.getAttack());
+                    System.out.println(enemies.get(a).getHitPoints());
+                    if(enemies.get(a).getHitPoints() <= 0){
+                        enemies.remove(a);
+                        viewManager.deleteEnemy(a);
+                    }
+
+                    bulletRemoved = true;
+                }
+            }
+        }
+        if(bulletRemoved == true){
+            handlePlayersBulletsCollisions();
+        }
     }
 }
 

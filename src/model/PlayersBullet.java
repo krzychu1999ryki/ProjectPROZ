@@ -7,6 +7,9 @@ public class PlayersBullet {
     private double positionY;
     private double positionX;
     private double rotation;
+    private double radius;
+    private double sizeX;
+    private double sizeY;
 
     public PlayersBullet() {
         speedX = 0;
@@ -14,6 +17,9 @@ public class PlayersBullet {
         positionX = 0;
         positionY = 0;
         rotation = 0;
+        sizeX = 18;
+        sizeY = 18;
+        radius = 8;
     }
 
     public PlayersBullet(double x, double y, double speedX, double speedY) {
@@ -22,6 +28,7 @@ public class PlayersBullet {
         this.positionX = x;
         this.positionY = y;
         rotation = 0;
+        radius = 8;
     }
 
 
@@ -67,4 +74,13 @@ public class PlayersBullet {
         this.speedY = speedY;
     }
 
+    public double getRadius() { return radius; }
+
+    public double centreX() {
+        return positionX + sizeX/2;
+    }
+
+    public double centreY() {
+        return positionY + sizeY/2;
+    }
 }

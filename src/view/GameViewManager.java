@@ -19,8 +19,8 @@ public class GameViewManager {
     private Scene gameScene;
     private Stage gameStage;
     private ImageView playerImage;
-    //private ImageView[] playersBulletsImages;
     private List<ImageView> playersBulletsImages;
+    private List<ImageView> enemiesImages;
 
     private GameController gameController;
 
@@ -54,8 +54,8 @@ public class GameViewManager {
         gamePane = new AnchorPane();
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
         gameStage = new Stage();
-        //playersBulletsImages = new ImageView[10];
         playersBulletsImages = new ArrayList<>();
+        enemiesImages = new ArrayList<>();
         createPlayer();
         gameStage.setScene(gameScene);
         createKeysListeners();
@@ -153,21 +153,26 @@ public class GameViewManager {
         playersBulletsImages.remove(number);
     }
 
-    public boolean getLeftPressed(){
-        return isLeftKeyPressed;
+    public void createEnemy(double x, double y){
+        ImageView newEnemy = new ImageView(PLAYER_STOP);
+        newEnemy.setLayoutX(x);
+        newEnemy.setLayoutY(y);
+        enemiesImages.add(newEnemy);
+        gamePane.getChildren().add(enemiesImages.get(enemiesImages.size() - 1));
     }
 
-    public boolean getRightPressed(){
-        return isRightKeyPressed;
+    public void deleteEnemy(int number){
+        gamePane.getChildren().remove(enemiesImages.get(number));
+        enemiesImages.remove(number);
     }
 
-    public boolean getDownPressed(){
-        return isDownKeyPressed;
-    }
+    public boolean getLeftPressed(){ return isLeftKeyPressed; }
 
-    public boolean getUpPressed(){
-        return isUpKeyPressed;
-    }
+    public boolean getRightPressed(){ return isRightKeyPressed; }
+
+    public boolean getDownPressed(){ return isDownKeyPressed; }
+
+    public boolean getUpPressed(){ return isUpKeyPressed; }
 
     public static int getGameHeight() { return GAME_HEIGHT; }
 
@@ -177,19 +182,11 @@ public class GameViewManager {
 
     public static int getPlayerHeight() { return PLAYER_HEIGHT; }
 
-    public boolean getAKeyPressed() {
-        return isAKeyPressed;
-    }
+    public boolean getAKeyPressed() { return isAKeyPressed; }
 
-    public boolean getDKeyPressed() {
-        return isDKeyPressed;
-    }
+    public boolean getDKeyPressed() { return isDKeyPressed; }
 
-    public boolean getSKeyPressed() {
-        return isSKeyPressed;
-    }
+    public boolean getSKeyPressed() { return isSKeyPressed; }
 
-    public boolean getWKeyPressed() {
-        return isWKeyPressed;
-    }
+    public boolean getWKeyPressed() { return isWKeyPressed; }
 }
