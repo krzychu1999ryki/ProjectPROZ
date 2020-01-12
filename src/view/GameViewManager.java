@@ -16,7 +16,7 @@ public class GameViewManager {
     private Scene gameScene;
     private Stage gameStage;
     private ImageView playerImage;
-    private ImageView playersBulletImage;
+    private ImageView[] playersBulletsImages;
 
     private GameController gameController;
 
@@ -34,6 +34,7 @@ public class GameViewManager {
     private boolean isRightKeyPressed;
     private boolean isUpKeyPressed;
     private boolean isDownKeyPressed;
+
     private boolean isWKeyPressed;
     private boolean isAKeyPressed;
     private boolean isSKeyPressed;
@@ -49,6 +50,7 @@ public class GameViewManager {
         gamePane = new AnchorPane();
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
         gameStage = new Stage();
+        playersBulletsImages = new ImageView[10];
         createPlayer();
         gameStage.setScene(gameScene);
         createKeysListeners();
@@ -129,16 +131,16 @@ public class GameViewManager {
         gamePane.setBackground(new Background(newBackgroundImage));
     }
 
-    public void createPlayersBullet(double x, double y){
-        playersBulletImage = new ImageView(PLAYERS_BULLET);
-        playersBulletImage.setLayoutY(y);
-        playersBulletImage.setLayoutX(x);
-        gamePane.getChildren().add(playersBulletImage);
+    public void createPlayersBullet(double x, double y, int number){
+        playersBulletsImages[number] = new ImageView(PLAYERS_BULLET);
+        playersBulletsImages[number].setLayoutY(y);
+        playersBulletsImages[number].setLayoutX(x);
+        gamePane.getChildren().add(playersBulletsImages[number]);
     }
 
-    public void movePlayersBullets(double x, double y){
-        playersBulletImage.setLayoutX(x);
-        playersBulletImage.setLayoutY(y);
+    public void movePlayersBullet(double x, double y, int number){
+        playersBulletsImages[number].setLayoutX(x);
+        playersBulletsImages[number].setLayoutY(y);
     }
 
     public boolean getLeftPressed(){
@@ -175,5 +177,17 @@ public class GameViewManager {
 
     public boolean getAKeyPressed() {
         return isAKeyPressed;
+    }
+
+    public boolean getDKeyPressed() {
+        return isDKeyPressed;
+    }
+
+    public boolean getSKeyPressed() {
+        return isSKeyPressed;
+    }
+
+    public boolean getWKeyPressed() {
+        return isWKeyPressed;
     }
 }

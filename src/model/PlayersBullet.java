@@ -8,8 +8,6 @@ public class PlayersBullet {
     private double positionX;
     private double rotation;
 
-    private final static  int MAIN_SPEED = 15;
-
     public PlayersBullet() {
         speedX = 0;
         speedY = 0;
@@ -67,10 +65,6 @@ public class PlayersBullet {
 
     public void setSpeedY(double speedY) {
         this.speedY = speedY;
-    }
-
-    public static int getMainSpeed() {
-        return MAIN_SPEED;
     }
 
 }

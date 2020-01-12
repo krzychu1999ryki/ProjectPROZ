@@ -10,7 +10,7 @@ public class Player {
     private double acceleration;
     private double bulletCoolDown;
 
-    private final static double BULLET_SPEED = 1;
+    private final static double BULLET_SPEED = 10;
 
     public Player(){
         positionX = 500;
