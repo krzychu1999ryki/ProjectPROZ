@@ -12,7 +12,6 @@ public class GameController {
     private AnimationTimer gameTimer;
     private GameViewManager viewManager;
     private Player player;
-    //private PlayersBullet[] playersBullets;
     private List<PlayersBullet> playersBullets;
     private double playersBulletCoolDown;
 
@@ -130,14 +129,18 @@ public class GameController {
 
                 viewManager.movePlayer(player.getPositionX(),player.getPositionY());
 
-                //deleteOutOfScreenBullets();
-
                 for(int i =0; i < playersBullets.size(); ++i){
                     playersBullets.get(i).setPositionX(playersBullets.get(i).getPositionX() + playersBullets.get(i).getSpeedX());
                     playersBullets.get(i).setPositionY(playersBullets.get(i).getPositionY() + playersBullets.get(i).getSpeedY());
-                    System.out.println(playersBullets.get(i).getPositionX());
-                    System.out.println(playersBullets.get(i).getPositionY());
+                }
 
+                for(int i = 0; i < playersBullets.size(); ++i){
+                    if(playersBullets.get(i).getPositionX() < -20 || playersBullets.get(i).getPositionX() > viewManager.getGameWidth()||
+                    playersBullets.get(i).getPositionY() < -20 || playersBullets.get(i).getPositionY() > viewManager.getGameHeight()){
+                        playersBullets.remove(i);
+                        viewManager.deletePlayersBullet(i);
+                        System.out.println("zabito");
+                    }
                 }
 
                 for(int i = 0; i < playersBullets.size(); ++i){
@@ -151,24 +154,5 @@ public class GameController {
         };
         gameTimer.start();
     }
-
-    //private void deleteOutOfScreenBullets(){
-    //    for(int i = 0; i < playersBulletsNumber; ++i ){
-     //       if(playersBullets[i].getPositionY() < 0 || playersBullets[i].getPositionX() < 0 ||
-     //               playersBullets[i].getPositionX() > viewManager.getGameWidth() ||
-      //              playersBullets[i].getPositionY() > viewManager.getGameHeight()){
-      //          playersBulletsNumber -= 1;
-       //         viewManager.removePlayersBullet(i, playersBulletsNumber);
-      //          for(int a = i; a < playersBulletsNumber - 1; ++a){
-      //          playersBullets[a] = playersBullets[a+1];
-       //         }
-      //          playersBullets[playersBulletsNumber - 1] = null;
-      //          --i;
-      //      }
-      //  }
-
-
-
-
 }
 

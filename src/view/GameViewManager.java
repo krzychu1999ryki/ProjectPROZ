@@ -136,30 +136,21 @@ public class GameViewManager {
         gamePane.setBackground(new Background(newBackgroundImage));
     }
 
-    public void createPlayersBullet(double x, double y, int number ){
-        playersBulletsImages.add (new ImageView(PLAYERS_BULLET));
+    public void createPlayersBullet(double x, double y, int number ) {
+        playersBulletsImages.add(new ImageView(PLAYERS_BULLET));
         playersBulletsImages.get(number - 1).setLayoutY(y);
         playersBulletsImages.get(number - 1).setLayoutX(x);
         gamePane.getChildren().add(playersBulletsImages.get(number - 1));
-
-
-        //playersBulletsImages[number] = new ImageView(PLAYERS_BULLET);
-        //playersBulletsImages[number].setLayoutY(y);
-        //playersBulletsImages[number].setLayoutX(x);
-        //gamePane.getChildren().add(playersBulletsImages[number]);
     }
-
-    //public void removePlayersBullet(int number, int playersBullets){
-    //    gamePane.getChildren().remove(playersBulletsImages[number]);
-    //    for (int i = number; i < playersBullets - 1; i++){
-    //        playersBulletsImages[i] = playersBulletsImages[i + 1];
-    //    }
-    //    playersBulletsImages[playersBullets - 1] = null;
-    //}
 
     public void movePlayersBullet(double x, double y, int number){
         playersBulletsImages.get(number).setLayoutX(x);
         playersBulletsImages.get(number).setLayoutY(y);
+    }
+
+    public void deletePlayersBullet(int number){
+        gamePane.getChildren().remove(playersBulletsImages.get(number));
+        playersBulletsImages.remove(number);
     }
 
     public boolean getLeftPressed(){
