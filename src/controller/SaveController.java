@@ -1,11 +1,9 @@
 package controller;
 
 
-import model.Player;
-import view.ViewManager;
+import model.Creature;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -14,7 +12,7 @@ import java.util.Scanner;
 public class SaveController {
 
 
-    public void savePlayer(Player loadedPlayer) throws IOException {
+    public void savePlayer(Creature loadedPlayer) throws IOException {
             File saveFile = new File("C:\\Users\\Arcangelo\\IdeaProjects\\Project\\src\\SavedPlayer.txt");
             if (!saveFile.exists()) {
                 try {
@@ -31,7 +29,7 @@ public class SaveController {
             saving.close();
     }
 
-    public void loadPlayer(Player loadedPlayer) {
+    public void loadPlayer(Creature loadedPlayer) {
         File saveFile = new File("C:\\Users\\Arcangelo\\IdeaProjects\\Project\\src\\SavedPlayer.txt");
         if (saveFile.exists()) {
             Scanner loading = new Scanner("C:\\Users\\Arcangelo\\IdeaProjects\\Project\\src\\SavedPlayer.txt");

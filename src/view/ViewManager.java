@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import model.MenuButton;
 import javafx.scene.text.Font;
 import controller.SaveController;
-import model.Player;
+import model.Creature;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,10 +36,10 @@ public class ViewManager {
     private MenuButton helpButton;
 
     private SaveController saveController;
-    private Player loadedPlayer;
+    private Creature loadedPlayer;
 
     public ViewManager() throws FileNotFoundException {
-        this.loadedPlayer = new Player();
+        this.loadedPlayer = new Creature();
         this.saveController = new SaveController();
         mainStage = new Stage();
         loadMenu();

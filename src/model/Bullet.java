@@ -1,6 +1,6 @@
 package model;
 
-public class PlayersBullet {
+public class Bullet {
 
     private double speedX;
     private double speedY;
@@ -8,7 +8,7 @@ public class PlayersBullet {
     private double positionX;
     private double rotation;
 
-    public PlayersBullet() {
+    public Bullet() {
         speedX = 0;
         speedY = 0;
         positionX = 0;
@@ -16,7 +16,7 @@ public class PlayersBullet {
         rotation = 0;
     }
 
-    public PlayersBullet(double x, double y, double speedX, double speedY) {
+    public Bullet(double x, double y, double speedX, double speedY) {
         this.speedX = speedX;
         this.speedY = speedY;
         this.positionX = x;

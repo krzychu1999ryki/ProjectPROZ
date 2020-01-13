@@ -1,6 +1,6 @@
 package model;
 
-public class Player {
+public class Creature {
     private double positionX;
     private double positionY;
     private double hitPoints;
@@ -12,7 +12,7 @@ public class Player {
 
     private final static double BULLET_SPEED = 10;
 
-    public Player(){
+    public Creature(){
         positionX = 500;
         positionY = 500;
         hitPoints = 10;
@@ -23,7 +23,7 @@ public class Player {
         bulletCoolDown = 20;
     }
 
-    public Player(double x,double y,double hp, double maxSpeed, double acceleration, double bulletCoolDown){
+    public Creature(double x, double y, double hp, double maxSpeed, double acceleration, double bulletCoolDown){
         this.positionX = x;
         this.positionY = y;
         this.hitPoints = hp;

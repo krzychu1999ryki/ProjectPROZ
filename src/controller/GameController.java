@@ -1,8 +1,8 @@
 package controller;
 
 import javafx.animation.AnimationTimer;
-import model.Player;
-import model.PlayersBullet;
+import model.Creature;
+import model.Bullet;
 import view.GameViewManager;
 
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import java.util.List;
 public class GameController {
     private AnimationTimer gameTimer;
     private GameViewManager viewManager;
-    private Player player;
-    private List<PlayersBullet> playersBullets;
+    private Creature player;
+    private List<Bullet> playersBullets;
     private double playersBulletCoolDown;
 
 
@@ -20,7 +20,7 @@ public class GameController {
         this.viewManager = viewManager;
         this.playersBullets = new ArrayList<>();
         createGameLoop();
-        player = new Player();
+        player = new Creature();
         playersBulletCoolDown = 0;
     }
 
@@ -100,28 +100,28 @@ public class GameController {
                 }
 
                 if(viewManager.getAKeyPressed() == true && playersBulletCoolDown == 0){
-                    playersBullets.add(new PlayersBullet(player.getPositionX(), player.getPositionY(),
+                    playersBullets.add(new Bullet(player.getPositionX(), player.getPositionY(),
                             -player.getBulletSpeed(), player.getSpeedY()/2));
                     viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBullets.size());
                     playersBulletCoolDown = player.getBulletCoolDown();
                 }
 
                 if(viewManager.getWKeyPressed() == true && playersBulletCoolDown == 0){
-                    playersBullets.add(new PlayersBullet(player.getPositionX(), player.getPositionY(),
+                    playersBullets.add(new Bullet(player.getPositionX(), player.getPositionY(),
                             player.getSpeedX()/2, -player.getBulletSpeed()));
                     viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBullets.size());
                     playersBulletCoolDown = player.getBulletCoolDown();
                 }
 
                 if(viewManager.getSKeyPressed() == true && playersBulletCoolDown == 0){
-                    playersBullets.add(new PlayersBullet(player.getPositionX(), player.getPositionY(),
+                    playersBullets.add(new Bullet(player.getPositionX(), player.getPositionY(),
                             player.getSpeedX()/2, player.getBulletSpeed()));
                     viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBullets.size());
                     playersBulletCoolDown = player.getBulletCoolDown();
                 }
 
                 if(viewManager.getDKeyPressed() == true && playersBulletCoolDown == 0){
-                    playersBullets.add(new PlayersBullet(player.getPositionX(), player.getPositionY(),
+                    playersBullets.add(new Bullet(player.getPositionX(), player.getPositionY(),
                             player.getBulletSpeed(), player.getSpeedY()/2));
                     viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBullets.size());
                     playersBulletCoolDown = player.getBulletCoolDown();
