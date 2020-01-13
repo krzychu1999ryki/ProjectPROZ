@@ -106,7 +106,6 @@ public class GameController {
                 }
 
                 if(enemies.size() == 0 && doors.isOpen() == false){
-                    System.out.println("tworze drzwi");
                     viewManager.createDoors(doors.getPositionX(), doors.getPositionY());
                     doors.setOpen(true);
                 }
@@ -312,7 +311,6 @@ public class GameController {
                     playersBullets.remove(i);
                     viewManager.deletePlayersBullet(i);
                     enemies.get(a).setHitPoints(enemies.get(a).getHitPoints() - player.getAttack());
-                    System.out.println(enemies.get(a).getHitPoints());
                     if(enemies.get(a).getHitPoints() <= 0){
                         enemies.remove(a);
                         viewManager.deleteEnemy(a);
@@ -334,7 +332,6 @@ public class GameController {
                     player.setHitPoints(player.getHitPoints() - enemiesBullets.get(i).getDamage());
                     enemiesBullets.remove(i);
                     viewManager.deleteEnemyBullet(i);
-                    System.out.println(player.getHitPoints());
                     if(player.getHitPoints() <= 0){
                         viewManager.getGameStage().close();
                     }

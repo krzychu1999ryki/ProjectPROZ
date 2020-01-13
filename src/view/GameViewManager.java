@@ -195,9 +195,7 @@ public class GameViewManager {
 
     public void createDoors(double x, double y){
         doors.setLayoutX(x);
-        System.out.println(x);
         doors.setLayoutY(y);
-        System.out.println(y);
         gamePane.getChildren().add(doors);
     }
 
