@@ -21,12 +21,14 @@ public class GameViewManager {
     private ImageView playerImage;
     private List<ImageView> playersBulletsImages;
     private List<ImageView> enemiesImages;
+    private List<ImageView> enemiesBulletsImages;
 
     private GameController gameController;
 
     private static final String BACKGROUND_1 = "view/resources/ground_01.png";
     private static final String PLAYER_STOP = "view/resources/player_stop.png";
     private static final String PLAYERS_BULLET = "view/resources/meteorBrown_tiny1.png";
+    private static final String ENEMY_BULLET = "view/resources/meteorGrey_tiny1.png";
 
 
     private static final int GAME_WIDTH = 800;
@@ -45,8 +47,7 @@ public class GameViewManager {
     private boolean isDKeyPressed;
 
 
-
-    public GameViewManager(){
+    public GameViewManager() {
         initializeGame();
     }
 
@@ -55,6 +56,7 @@ public class GameViewManager {
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
         gameStage = new Stage();
         playersBulletsImages = new ArrayList<>();
+        enemiesBulletsImages = new ArrayList<>();
         enemiesImages = new ArrayList<>();
         createPlayer();
         gameStage.setScene(gameScene);
@@ -66,8 +68,8 @@ public class GameViewManager {
 
     private void createPlayer() {
         playerImage = new ImageView(PLAYER_STOP);
-        playerImage.setLayoutX(GAME_WIDTH/2);
-        playerImage.setLayoutY(GAME_HEIGHT/2);
+        playerImage.setLayoutX(GAME_WIDTH / 2);
+        playerImage.setLayoutY(GAME_HEIGHT / 2);
         gamePane.getChildren().add(playerImage);
     }
 
@@ -80,21 +82,21 @@ public class GameViewManager {
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                if(keyEvent.getCode() == KeyCode.LEFT){
+                if (keyEvent.getCode() == KeyCode.LEFT) {
                     isLeftKeyPressed = true;
-                } else if (keyEvent.getCode() == KeyCode.RIGHT){
+                } else if (keyEvent.getCode() == KeyCode.RIGHT) {
                     isRightKeyPressed = true;
-                } else if(keyEvent.getCode() == KeyCode.DOWN){
+                } else if (keyEvent.getCode() == KeyCode.DOWN) {
                     isDownKeyPressed = true;
-                } else if(keyEvent.getCode() == KeyCode.UP){
+                } else if (keyEvent.getCode() == KeyCode.UP) {
                     isUpKeyPressed = true;
-                } else if(keyEvent.getCode() == KeyCode.W){
+                } else if (keyEvent.getCode() == KeyCode.W) {
                     isWKeyPressed = true;
-                } else if(keyEvent.getCode() == KeyCode.A){
+                } else if (keyEvent.getCode() == KeyCode.A) {
                     isAKeyPressed = true;
-                } else if(keyEvent.getCode() == KeyCode.S){
+                } else if (keyEvent.getCode() == KeyCode.S) {
                     isSKeyPressed = true;
-                } else if(keyEvent.getCode() == KeyCode.D){
+                } else if (keyEvent.getCode() == KeyCode.D) {
                     isDKeyPressed = true;
                 }
             }
@@ -103,11 +105,11 @@ public class GameViewManager {
         gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                if(keyEvent.getCode() == KeyCode.LEFT){
+                if (keyEvent.getCode() == KeyCode.LEFT) {
                     isLeftKeyPressed = false;
-                } else if (keyEvent.getCode() == KeyCode.RIGHT){
+                } else if (keyEvent.getCode() == KeyCode.RIGHT) {
                     isRightKeyPressed = false;
-                } else if (keyEvent.getCode() == KeyCode.DOWN){
+                } else if (keyEvent.getCode() == KeyCode.DOWN) {
                     isDownKeyPressed = false;
                 } else if (keyEvent.getCode() == KeyCode.UP) {
                     isUpKeyPressed = false;
@@ -117,43 +119,62 @@ public class GameViewManager {
                     isWKeyPressed = false;
                 } else if (keyEvent.getCode() == KeyCode.S) {
                     isSKeyPressed = false;
-                }else if (keyEvent.getCode() == KeyCode.D) {
+                } else if (keyEvent.getCode() == KeyCode.D) {
                     isDKeyPressed = false;
                 }
             }
         });
-    };
+    }
 
-    public void movePlayer(double x, double y){
+    ;
+
+    public void movePlayer(double x, double y) {
         playerImage.setLayoutX(x);
         playerImage.setLayoutY(y);
     }
 
-    private void setBackground(String background){
+    private void setBackground(String background) {
         Image backgroundImage = new Image(background, 64, 64, false, true);
         BackgroundImage newBackgroundImage = new BackgroundImage(backgroundImage,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
         gamePane.setBackground(new Background(newBackgroundImage));
     }
 
-    public void createPlayersBullet(double x, double y, int number ) {
+    public void createPlayersBullet(double x, double y, int number) {
         playersBulletsImages.add(new ImageView(PLAYERS_BULLET));
         playersBulletsImages.get(number - 1).setLayoutY(y);
         playersBulletsImages.get(number - 1).setLayoutX(x);
         gamePane.getChildren().add(playersBulletsImages.get(number - 1));
     }
 
-    public void movePlayersBullet(double x, double y, int number){
+    public void movePlayersBullet(double x, double y, int number) {
         playersBulletsImages.get(number).setLayoutX(x);
         playersBulletsImages.get(number).setLayoutY(y);
     }
 
-    public void deletePlayersBullet(int number){
+    public void createEnemyBullet(double x, double y, int number){
+        enemiesBulletsImages.add(new ImageView(ENEMY_BULLET));
+        enemiesBulletsImages.get(number - 1).setLayoutY(y);
+        enemiesBulletsImages.get(number - 1).setLayoutX(x);
+        gamePane.getChildren().add(enemiesBulletsImages.get(number - 1));
+    }
+
+    public void moveEnemyBullet(double x, double y, int number) {
+        enemiesBulletsImages.get(number).setLayoutX(x);
+        enemiesBulletsImages.get(number).setLayoutY(y);
+    }
+
+    public void deletePlayersBullet(int number) {
         gamePane.getChildren().remove(playersBulletsImages.get(number));
         playersBulletsImages.remove(number);
     }
 
-    public void createEnemy(double x, double y){
+    public void deleteEnemyBullet(int number) {
+        gamePane.getChildren().remove(enemiesBulletsImages.get(number));
+        enemiesBulletsImages.remove(number);
+    }
+
+    public void createEnemy(double x, double y) {
         ImageView newEnemy = new ImageView(PLAYER_STOP);
         newEnemy.setLayoutX(x);
         newEnemy.setLayoutY(y);
@@ -161,32 +182,56 @@ public class GameViewManager {
         gamePane.getChildren().add(enemiesImages.get(enemiesImages.size() - 1));
     }
 
-    public void deleteEnemy(int number){
+    public void deleteEnemy(int number) {
         gamePane.getChildren().remove(enemiesImages.get(number));
         enemiesImages.remove(number);
     }
 
-    public boolean getLeftPressed(){ return isLeftKeyPressed; }
+    public boolean getLeftPressed() {
+        return isLeftKeyPressed;
+    }
 
-    public boolean getRightPressed(){ return isRightKeyPressed; }
+    public boolean getRightPressed() {
+        return isRightKeyPressed;
+    }
 
-    public boolean getDownPressed(){ return isDownKeyPressed; }
+    public boolean getDownPressed() {
+        return isDownKeyPressed;
+    }
 
-    public boolean getUpPressed(){ return isUpKeyPressed; }
+    public boolean getUpPressed() {
+        return isUpKeyPressed;
+    }
 
-    public static int getGameHeight() { return GAME_HEIGHT; }
+    public static int getGameHeight() {
+        return GAME_HEIGHT;
+    }
 
-    public static int getGameWidth() { return GAME_WIDTH; }
+    public static int getGameWidth() {
+        return GAME_WIDTH;
+    }
 
-    public static int getPlayerWidth() { return PLAYER_WIDTH; }
+    public static int getPlayerWidth() {
+        return PLAYER_WIDTH;
+    }
 
-    public static int getPlayerHeight() { return PLAYER_HEIGHT; }
+    public static int getPlayerHeight() {
+        return PLAYER_HEIGHT;
+    }
 
-    public boolean getAKeyPressed() { return isAKeyPressed; }
+    public boolean getAKeyPressed() {
+        return isAKeyPressed;
+    }
 
-    public boolean getDKeyPressed() { return isDKeyPressed; }
+    public boolean getDKeyPressed() {
+        return isDKeyPressed;
+    }
 
-    public boolean getSKeyPressed() { return isSKeyPressed; }
+    public boolean getSKeyPressed() {
+        return isSKeyPressed;
+    }
 
-    public boolean getWKeyPressed() { return isWKeyPressed; }
+    public boolean getWKeyPressed() {
+        return isWKeyPressed;
+    }
 }
