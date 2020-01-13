@@ -10,6 +10,7 @@ public class Bullet {
     private double radius;
     private double sizeX;
     private double sizeY;
+    private double damage;
 
     public Bullet() {
         speedX = 0;
@@ -20,15 +21,17 @@ public class Bullet {
         sizeX = 18;
         sizeY = 18;
         radius = 8;
+        damage = 1;
     }
 
-    public Bullet(double x, double y, double speedX, double speedY) {
+    public Bullet(double x, double y, double speedX, double speedY, double damage) {
         this.speedX = speedX;
         this.speedY = speedY;
         this.positionX = x;
         this.positionY = y;
         rotation = 0;
         radius = 8;
+        this.damage = damage;
     }
 
 
@@ -82,5 +85,9 @@ public class Bullet {
 
     public double centreY() {
         return positionY + sizeY/2;
+    }
+
+    public double getDamage() {
+        return damage;
     }
 }

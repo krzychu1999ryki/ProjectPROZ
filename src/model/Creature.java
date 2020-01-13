@@ -34,7 +34,7 @@ public class Creature {
     }
 
     public Creature(double x, double y, double hp, double maxSpeed, double acceleration, double bulletCoolDown,
-                    double sizeX, double sizeY, double radius){
+                    double sizeX, double sizeY, double radius, double attack){
         this.positionX = x;
         this.positionY = y;
         this.hitPoints = hp;
@@ -47,6 +47,7 @@ public class Creature {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.radius = radius;
+        this.attack = attack;
     }
 
     public void setPositionX(double x) {

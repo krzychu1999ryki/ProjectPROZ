@@ -28,9 +28,9 @@ public class GameController {
         player = new Creature();
         enemies = new ArrayList<>();
         enemiesBullets = new ArrayList<>();
-        enemies.add(new Creature(100,100,4,0,0,50, 64,64, 28 ));
+        enemies.add(new Creature(100,100,4,0,0,50, 64,64, 28 , 1));
         viewManager.createEnemy(100,100);
-        enemies.add(new Creature(600,200,4,0,0,50, 64,64, 28 ));
+        enemies.add(new Creature(600,200,4,0,0,50, 64,64, 28, 1 ));
         viewManager.createEnemy(600,200);
         playersBulletCoolDown = 0;
         enemiesBulletCoolDown = 50;
@@ -68,6 +68,7 @@ public class GameController {
                 }
 
                 handlePlayersBulletsCollisions();
+                handleEnemiesBulletsCollisions();
 
                 if(playersBulletCoolDown != 0){
                     playersBulletCoolDown -= 1;
@@ -159,28 +160,28 @@ public class GameController {
     private void shootPlayersBullet(){
         if(viewManager.getAKeyPressed() == true && playersBulletCoolDown == 0){
             playersBullets.add(new Bullet(player.getPositionX(), player.getPositionY(),
-                    -player.getBulletSpeed(), player.getSpeedY()/2));
+                    -player.getBulletSpeed(), player.getSpeedY()/2, player.getAttack()));
             viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBullets.size());
             playersBulletCoolDown = player.getBulletCoolDown();
         }
 
         if(viewManager.getWKeyPressed() == true && playersBulletCoolDown == 0){
             playersBullets.add(new Bullet(player.getPositionX(), player.getPositionY(),
-                    player.getSpeedX()/2, -player.getBulletSpeed()));
+                    player.getSpeedX()/2, -player.getBulletSpeed(), player.getAttack()));
             viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBullets.size());
             playersBulletCoolDown = player.getBulletCoolDown();
         }
 
         if(viewManager.getSKeyPressed() == true && playersBulletCoolDown == 0){
             playersBullets.add(new Bullet(player.getPositionX(), player.getPositionY(),
-                    player.getSpeedX()/2, player.getBulletSpeed()));
+                    player.getSpeedX()/2, player.getBulletSpeed(), player.getAttack()));
             viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBullets.size());
             playersBulletCoolDown = player.getBulletCoolDown();
         }
 
         if(viewManager.getDKeyPressed() == true && playersBulletCoolDown == 0){
             playersBullets.add(new Bullet(player.getPositionX(), player.getPositionY(),
-                    player.getBulletSpeed(), player.getSpeedY()/2));
+                    player.getBulletSpeed(), player.getSpeedY()/2, player.getAttack()));
             viewManager.createPlayersBullet(player.getPositionX(),player.getPositionY(),playersBullets.size());
             playersBulletCoolDown = player.getBulletCoolDown();
         }
@@ -249,6 +250,25 @@ public class GameController {
         }
     }
 
+    private void handleEnemiesBulletsCollisions(){
+        boolean bulletRemoved = false;
+        for(int i = 0; i < enemiesBullets.size(); i++){
+                if(calculateDistance(player, enemiesBullets.get(i)) <= 0){
+                    player.setHitPoints(player.getHitPoints() - enemiesBullets.get(i).getDamage());
+                    enemiesBullets.remove(i);
+                    viewManager.deleteEnemyBullet(i);
+                    System.out.println(player.getHitPoints());
+                    if(player.getHitPoints() <= 0){
+                        viewManager.getGameStage().close();
+                    }
+                    bulletRemoved = true;
+            }
+        }
+        if(bulletRemoved == true){
+            handleEnemiesBulletsCollisions();
+        }
+    }
+
     private void shootEnemyBullet(Creature enemy){
         double distanceX = player.getPositionX() - enemy.getPositionX();
         double distanceY = player.getPositionY() - enemy.getPositionY();
@@ -256,7 +276,7 @@ public class GameController {
         if(ratio < 0) {
             ratio = -ratio;
         }
-        double speedX = Math.sqrt(Math.pow(enemy.getBulletSpeed(),2)/(1 + Math.pow(ratio,2)));
+        double speedX = Math.sqrt(Math.pow(enemy.getBulletSpeed()/2,2)/(1 + Math.pow(ratio,2)));
         double speedY = speedX * ratio;
         if(distanceX < 0){
             speedX = -speedX;
@@ -264,7 +284,7 @@ public class GameController {
         if(distanceY < 0){
             speedY = -speedY;
         }
-        enemiesBullets.add(new Bullet(enemy.getPositionX(), enemy.getPositionY(), speedX, speedY));
+        enemiesBullets.add(new Bullet(enemy.getPositionX(), enemy.getPositionY(), speedX, speedY, enemy.getAttack()));
         viewManager.createEnemyBullet(enemy.getPositionX(), enemy.getPositionY(), enemiesBullets.size());
     }
 }

@@ -126,8 +126,6 @@ public class GameViewManager {
         });
     }
 
-    ;
-
     public void movePlayer(double x, double y) {
         playerImage.setLayoutX(x);
         playerImage.setLayoutY(y);
@@ -233,5 +231,9 @@ public class GameViewManager {
 
     public boolean getWKeyPressed() {
         return isWKeyPressed;
+    }
+
+    public Stage getGameStage() {
+        return gameStage;
     }
 }
