@@ -1,7 +1,5 @@
 package view;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -10,10 +8,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.MenuButton;
 import javafx.scene.text.Font;
-import view.GameViewManager;
+import controller.SaveController;
+import model.Player;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 public class ViewManager {
@@ -34,8 +34,12 @@ public class ViewManager {
     private MenuButton loadGame;
     private MenuButton helpButton;
 
+    private SaveController saveController;
+    private Player loadedPlayer;
 
     public ViewManager() throws FileNotFoundException {
+        this.loadedPlayer = new Player();
+        this.saveController = new SaveController();
         mainStage = new Stage();
         loadMenu();
     }
@@ -45,6 +49,7 @@ public class ViewManager {
         Scene mainScene = new Scene(mainPane, STAGE_WIDTH, STAGE_HEIGHT);
         mainStage.setScene(mainScene);
         mainStage.setTitle("The Ruins of Ustro 3");
+        mainStage.setResizable(false);
         createButtons();
         createBackground();
         createLogo();
@@ -169,11 +174,19 @@ public class ViewManager {
             try{
                 GameViewManager gameManager = new GameViewManager();
 
-                mainStage.close();
+                //mainStage.close();
             } catch(Exception e) {
                 e.printStackTrace();
             } });
-        level2.setOnAction(ActionEvent -> { int i = 2; });
+
+        level2.setOnAction(ActionEvent -> {
+            try {
+                saveController.savePlayer(loadedPlayer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
         level3.setOnAction(ActionEvent -> { int i = 3; });
     }
 
@@ -232,6 +245,5 @@ public class ViewManager {
         logo.setLayoutY(100);
         mainPane.getChildren().add(logo);
     }
-
 
 }
