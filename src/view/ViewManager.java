@@ -164,12 +164,6 @@ public class ViewManager {
         imageView.setOnMouseExited(mouseEvent -> imageView.setEffect(null));
     }
 
-    private int increaseAttack( int attack ) {
-        attack++;
-
-        return attack;
-    }
-
 
 
 
