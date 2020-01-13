@@ -1,19 +1,20 @@
 package view;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.MenuButton;
 import javafx.scene.text.Font;
-import view.GameViewManager;
+import controller.SaveController;
+import model.Creature;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 public class ViewManager {
@@ -34,8 +35,12 @@ public class ViewManager {
     private MenuButton loadGame;
     private MenuButton helpButton;
 
+    private SaveController saveController;
+    private Creature loadedPlayer;
 
     public ViewManager() throws FileNotFoundException {
+        this.loadedPlayer = new Creature();
+        this.saveController = new SaveController();
         mainStage = new Stage();
         loadMenu();
     }
@@ -45,6 +50,7 @@ public class ViewManager {
         Scene mainScene = new Scene(mainPane, STAGE_WIDTH, STAGE_HEIGHT);
         mainStage.setScene(mainScene);
         mainStage.setTitle("The Ruins of Ustro 3");
+        mainStage.setResizable(false);
         createButtons();
         createBackground();
         createLogo();
@@ -85,6 +91,7 @@ public class ViewManager {
         loadGame.setOnAction(newGame -> {
             try {
                 setCharacterScreen();
+                //saveController.loadPlayer(loadedPlayer);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -139,6 +146,27 @@ public class ViewManager {
         return playButton;
     }
 
+    private MenuButton createSaveButton(AnchorPane pane) throws FileNotFoundException {
+        MenuButton saveButton = new MenuButton("Save", BUTTON_RELEASED_STYLE, BUTTON_PRESSED_STYLE, FONT_PATH2);
+        saveButton.setLayoutX(210);
+        saveButton.setLayoutY(540);
+        pane.getChildren().add(saveButton);
+
+        return saveButton;
+    }
+
+    private void setStatButtons(AnchorPane pane, ImageView imageView, int X, int Y) {
+        imageView.setLayoutX(X);
+        imageView.setLayoutY(Y);
+        pane.getChildren().add(imageView);
+
+        imageView.setOnMouseEntered(mouseEvent -> imageView.setEffect(new DropShadow()));
+        imageView.setOnMouseExited(mouseEvent -> imageView.setEffect(null));
+    }
+
+
+
+
     private void setCharacterScreen() throws FileNotFoundException {
         mainPane = new AnchorPane();
         Text title1 = new Text();
@@ -146,12 +174,13 @@ public class ViewManager {
         title1.setText("Your character");
         title2.setText("Choose level");
         title1.setFont(Font.loadFont(new FileInputStream(FONT_PATH1), 50));
-        title2.setFont(Font.loadFont(new FileInputStream(FONT_PATH1), 30));
+        title2.setFont(Font.loadFont(new FileInputStream(FONT_PATH1), 40));
 
         title1.setLayoutX(210);
         title1.setLayoutY(70);
-        title2.setLayoutX(370);
+        title2.setLayoutX(460);
         title2.setLayoutY(150);
+
         mainPane.getChildren().add(title1);
         mainPane.getChildren().add(title2);
 
@@ -159,21 +188,97 @@ public class ViewManager {
         MenuButton level1 = createPlayButton(mainPane, 600, 200);
         MenuButton level2 = createPlayButton(mainPane, 600, 330);
         MenuButton level3 = createPlayButton(mainPane, 600, 460);
+        MenuButton saveButton = createSaveButton(mainPane);
+
+        Text L1 = new Text();
+        Text L2 = new Text();
+        Text L3 = new Text();
+        L1.setText("Level 1");
+        L2.setText("Level 2");
+        L3.setText("Level 3");
+        L1.setFont(Font.loadFont(new FileInputStream(FONT_PATH1), 30));
+        L2.setFont(Font.loadFont(new FileInputStream(FONT_PATH1), 30));
+        L3.setFont(Font.loadFont(new FileInputStream(FONT_PATH1), 30));
+
+        L1.setLayoutX(470);
+        L1.setLayoutY(235);
+        L2.setLayoutX(470);
+        L2.setLayoutY(365);
+        L3.setLayoutX(470);
+        L3.setLayoutY(495);
+
+        mainPane.getChildren().add(L1);
+        mainPane.getChildren().add(L2);
+        mainPane.getChildren().add(L3);
+
+        ImageView character = new ImageView("view/resources/player_03.png");
+        character.setLayoutX(20);
+        character.setLayoutY(250);
+
+        mainPane.getChildren().add(character);
+
+        int attack = 1;
+        int speed = 4;
+        int hp = 6;
+
+        Text skillPoints = new Text();
+        Text attackStat = new Text();
+        Text speedStat = new Text();
+        Text hitPoints = new Text();
+        skillPoints.setText("Skill Points:   3");
+        attackStat.setText("Attack:   " + attack);
+        speedStat.setText("Speed:    " + speed);
+        hitPoints.setText("HP:        " + hp);
+        skillPoints.setFont(Font.loadFont(new FileInputStream(FONT_PATH1), 30));
+        attackStat.setFont(Font.loadFont(new FileInputStream(FONT_PATH1), 25));
+        speedStat.setFont(Font.loadFont(new FileInputStream(FONT_PATH1), 25));
+        hitPoints.setFont(Font.loadFont(new FileInputStream(FONT_PATH1), 25));
+
+        skillPoints.setLayoutX(50);
+        skillPoints.setLayoutY(200);
+        attackStat.setLayoutX(150);
+        attackStat.setLayoutY(280);
+        speedStat.setLayoutX(150);
+        speedStat.setLayoutY(350);
+        hitPoints.setLayoutX(150);
+        hitPoints.setLayoutY(420);
+
+        ImageView addAttack = new ImageView("view/resources/cursorSword_silver.png");
+        setStatButtons(mainPane, addAttack, 300, 255);
+        ImageView addSpeed = new ImageView("view/resources/cursorSword_silver.png");
+        setStatButtons(mainPane, addSpeed, 300, 325);
+        ImageView addHp = new ImageView("view/resources/cursorSword_silver.png");
+        setStatButtons(mainPane, addHp, 300, 395);
+
+        mainPane.getChildren().add(skillPoints);
+        mainPane.getChildren().add(attackStat);
+        mainPane.getChildren().add(speedStat);
+        mainPane.getChildren().add(hitPoints);
 
         Scene scene = new Scene(mainPane, STAGE_WIDTH, STAGE_HEIGHT);
         mainStage.setScene(scene);
 
         createBackground();
 
+        saveButton.setOnAction(actionEvent -> {
+            try {
+                saveController.savePlayer(loadedPlayer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
         level1.setOnAction(actionEvent -> {
             try{
                 GameViewManager gameManager = new GameViewManager();
 
-                mainStage.close();
+                //mainStage.close();
             } catch(Exception e) {
                 e.printStackTrace();
             } });
+
         level2.setOnAction(ActionEvent -> { int i = 2; });
+
         level3.setOnAction(ActionEvent -> { int i = 3; });
     }
 
@@ -232,6 +337,5 @@ public class ViewManager {
         logo.setLayoutY(100);
         mainPane.getChildren().add(logo);
     }
-
 
 }
