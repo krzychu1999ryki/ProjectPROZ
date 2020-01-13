@@ -1,37 +1,53 @@
 package model;
 
-public class Player {
+public class Creature {
     private double positionX;
     private double positionY;
     private double hitPoints;
+    private double maxHitPoints;
     private double speedX;
     private double speedY;
     private double maxSpeed;
     private double acceleration;
     private double bulletCoolDown;
+    private double sizeX;
+    private double sizeY;
+    private double radius;
+    private double attack;
 
     private final static double BULLET_SPEED = 10;
 
-    public Player(){
+    public Creature(){
         positionX = 500;
         positionY = 500;
         hitPoints = 10;
+        maxHitPoints = 10;
         speedX = 0;
         speedY = 0;
         maxSpeed = 8;
         acceleration = 0.5;
         bulletCoolDown = 20;
+        attack = 1;
+        sizeX = 64;
+        sizeY = 64;
+        radius = 28;
     }
 
-    public Player(double x,double y,double hp, double maxSpeed, double acceleration, double bulletCoolDown){
+    public Creature(double x, double y, double hp, double maxSpeed, double acceleration, double bulletCoolDown,
+                    double sizeX, double sizeY, double radius, double attack){
         this.positionX = x;
         this.positionY = y;
         this.hitPoints = hp;
+        this.maxHitPoints = hp;
         speedX = 0;
         speedY = 0;
         this.maxSpeed = maxSpeed;
         this.acceleration = acceleration;
         this.bulletCoolDown = bulletCoolDown;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.radius = radius;
+        this.attack = attack;
     }
 
     public void setPositionX(double x) {
@@ -81,4 +97,36 @@ public class Player {
     public double getBulletCoolDown() {
         return bulletCoolDown;
     }
+
+    public double getSizeY() {
+        return sizeY;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public double getSizeX() {
+        return sizeX;
+    }
+
+    public double centreX() {
+        return positionX + sizeX/2;
+    }
+
+    public double centreY() {
+        return positionY + sizeY/2;
+    }
+
+    public double getHitPoints() { return hitPoints; }
+
+    public void setHitPoints(double hitPoints) { this.hitPoints = hitPoints; }
+
+    public double getAttack() { return attack; }
+
+    public void setAttack(double attack) { this.attack = attack; }
+
+    public double getMaxHitPoints() { return maxHitPoints; }
+
+    public void setMaxHitPoints(double maxHitPoints) { this.maxHitPoints = maxHitPoints; }
 }
