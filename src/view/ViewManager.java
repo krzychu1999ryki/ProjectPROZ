@@ -7,10 +7,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.Creature;
 import model.MenuButton;
 import javafx.scene.text.Font;
 import controller.SaveController;
-import model.Creature;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
