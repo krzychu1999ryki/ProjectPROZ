@@ -35,9 +35,9 @@ public class GameController {
         this.viewManager = viewManager;
         this.playersBullets = new ArrayList<>();
         createGameLoop();
-        player = new Creature();
         infoLabel = new LocationsInfoLabel(1);
-        enemies = infoLabel.getRoomOneCreatures();
+        enemies = infoLabel.getRoomCreatures(1);
+        player = new Creature();
 
         doors = infoLabel.getDoors(0);
 
@@ -103,6 +103,16 @@ public class GameController {
 
                 if(enemiesBulletCoolDown != 0){
                     enemiesBulletCoolDown -= 1;
+                }
+
+                if(enemies.size() == 0 && doors.isOpen() == false){
+                    System.out.println("tworze drzwi");
+                    viewManager.createDoors(doors.getPositionX(), doors.getPositionY());
+                    doors.setOpen(true);
+                }
+
+                if(doors.isOpen() == true){
+                    checkDoorsEntered();
                 }
             }
         };
@@ -284,6 +294,11 @@ public class GameController {
                 Math.pow(a.centreY() - b.centreY(), 2)) - (a.getRadius() + b.getRadius());
     }
 
+    private double calculateDistance(Creature a, Doors doors){
+        return Math.sqrt(Math.pow(a.centreX() - doors.centreX(), 2) +
+                Math.pow(a.centreY() - doors.centreY(), 2)) - (a.getRadius() + doors.getRadius());
+    }
+
     private double calculateDistance(Creature a, Bullet b){
        return Math.sqrt(Math.pow(a.centreX() - b.centreX(), 2) +
                 Math.pow(a.centreY() - b.centreY(), 2)) - (a.getRadius() + b.getRadius());
@@ -396,6 +411,22 @@ public class GameController {
         }
         enemiesBullets.add(new Bullet(enemy.getPositionX(), enemy.getPositionY(), speedX, speedY, enemy.getAttack()));
         viewManager.createEnemyBullet(enemy.getPositionX(), enemy.getPositionY(), enemiesBullets.size());
+    }
+
+    private void checkDoorsEntered(){
+        if(calculateDistance(player, doors) < 0){
+            if(currentRoom <= 2){
+                currentRoom++;
+                doors = infoLabel.getDoors(currentRoom -1);
+                enemies = infoLabel.getRoomCreatures(currentRoom);
+                for(int i = 0; i < enemies.size(); ++i){
+                    viewManager.createEnemy(enemies.get(i).getPositionX(), enemies.get(i).getPositionX());
+                }
+                viewManager.deleteDoors();
+            }else if(currentRoom == 3){
+                viewManager.getGameStage().close();
+            }
+        }
     }
 
     private void createDoors(){

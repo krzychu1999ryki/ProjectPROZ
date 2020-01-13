@@ -30,24 +30,31 @@ public class LocationsInfoLabel {
             roomThreeCreatures.add(new Creature(600,200,4,3,0.5,
                     50, 64,64, 28, 1 ));
 
+            roomThreeCreatures.add(new Creature(300,150,4,3,0.5,
+                    50, 64,64, 28, 1 ));
+
+            roomThreeCreatures.add(new Creature(100,450,4,3,0.5,
+                    50, 64,64, 28, 1 ));
+
             doors = new Doors[3];
             doors[0] = new Doors(400, 200, false);
-            doors[1] = new Doors(400, 600, false);
-            doors[2] = new Doors(300, 300, false);
+            doors[1] = new Doors(500, 400, false);
+            doors[2] = new Doors(400, 300, false);
         }
     }
 
 
-    public List<Creature> getRoomOneCreatures() {
-        return roomOneCreatures;
-    }
+    public List<Creature> getRoomCreatures( int room) {
+        if(room == 1){
+            return roomOneCreatures;
+        }else if(room == 2){
+            return roomTwoCreatures;
+        }else if(room == 3){
+            return roomThreeCreatures;
+        }else{
+            return null;
+        }
 
-    public List<Creature> getRoomTwoCreatures() {
-        return roomTwoCreatures;
-    }
-
-    public List<Creature> getRoomThreeCreatures() {
-        return roomThreeCreatures;
     }
 
     public Doors getDoors(int i){

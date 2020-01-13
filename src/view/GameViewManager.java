@@ -19,6 +19,7 @@ public class GameViewManager {
     private Scene gameScene;
     private Stage gameStage;
     private ImageView playerImage;
+    private ImageView doors;
     private List<ImageView> playersBulletsImages;
     private List<ImageView> enemiesImages;
     private List<ImageView> enemiesBulletsImages;
@@ -29,7 +30,8 @@ public class GameViewManager {
     private static final String PLAYER_STOP = "view/resources/player_stop.png";
     private static final String PLAYERS_BULLET = "view/resources/meteorBrown_tiny1.png";
     private static final String ENEMY_BULLET = "view/resources/meteorGrey_tiny1.png";
-
+    private static final String DOORS_CLOSED = "view/resources/rpgTile189.png";
+    private static final String DOORS_OPENED = "view/resources/rpgTile169.png";
 
     private static final int GAME_WIDTH = 800;
     private static final int GAME_HEIGHT = 600;
@@ -53,6 +55,7 @@ public class GameViewManager {
 
     private void initializeGame() {
         gamePane = new AnchorPane();
+        doors = new ImageView(DOORS_OPENED);
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
         gameStage = new Stage();
         playersBulletsImages = new ArrayList<>();
@@ -188,6 +191,18 @@ public class GameViewManager {
     public void deleteEnemy(int number) {
         gamePane.getChildren().remove(enemiesImages.get(number));
         enemiesImages.remove(number);
+    }
+
+    public void createDoors(double x, double y){
+        doors.setLayoutX(x);
+        System.out.println(x);
+        doors.setLayoutY(y);
+        System.out.println(y);
+        gamePane.getChildren().add(doors);
+    }
+
+    public void deleteDoors(){
+        gamePane.getChildren().remove(doors);
     }
 
     public boolean getLeftPressed() {
