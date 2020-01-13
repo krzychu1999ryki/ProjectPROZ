@@ -131,6 +131,11 @@ public class GameViewManager {
         playerImage.setLayoutY(y);
     }
 
+    public void moveEnemy(double x, double y, int number){
+        enemiesImages.get(number).setLayoutX(x);
+        enemiesImages.get(number).setLayoutY(y);
+    }
+
     private void setBackground(String background) {
         Image backgroundImage = new Image(background, 64, 64, false, true);
         BackgroundImage newBackgroundImage = new BackgroundImage(backgroundImage,

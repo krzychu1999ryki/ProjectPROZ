@@ -28,9 +28,9 @@ public class GameController {
         player = new Creature();
         enemies = new ArrayList<>();
         enemiesBullets = new ArrayList<>();
-        enemies.add(new Creature(100,100,4,0,0,50, 64,64, 28 , 1));
+        enemies.add(new Creature(100,100,4,3,0.5,50, 64,64, 28 , 1));
         viewManager.createEnemy(100,100);
-        enemies.add(new Creature(600,200,4,0,0,50, 64,64, 28, 1 ));
+        enemies.add(new Creature(600,200,4,3,0.5,50, 64,64, 28, 1 ));
         viewManager.createEnemy(600,200);
         playersBulletCoolDown = 0;
         enemiesBulletCoolDown = 50;
@@ -43,6 +43,13 @@ public class GameController {
 
                 movePlayer();
                 correctPlayersPosition();
+
+                moveEnemies();
+
+                handleEnemiesCollisions();
+                handlePlayersCollision();
+
+
                 shootPlayersBullet();
 
                 if(enemiesBulletCoolDown == 0){
@@ -55,6 +62,10 @@ public class GameController {
                 }
 
                 viewManager.movePlayer(player.getPositionX(),player.getPositionY());
+
+                for (int i = 0; i < enemies.size(); i++){
+                    viewManager.moveEnemy(enemies.get(i).getPositionX(), enemies.get(i).getPositionY(), i);
+                }
 
                 movePlayersBullets();
                 moveEnemiesBullets();
@@ -105,21 +116,21 @@ public class GameController {
             }
         }else if(player.getSpeedY() > 0){
             player.setSpeedY(player.getSpeedY() - player.getAcceleration());
-        }
+       }
 
         if(viewManager.getUpPressed()){
             if(player.getSpeedY() > -player.getMaxSpeed()){
                 player.setSpeedY(player.getSpeedY() - player.getAcceleration());
             }
         }else if(player.getSpeedY() < 0){
-            player.setSpeedY(player.getSpeedY() + player.getAcceleration());
-        }
+           player.setSpeedY(player.getSpeedY() + player.getAcceleration());
+       }
 
         if(viewManager.getRightPressed() && viewManager.getLeftPressed()){
             if(player.getSpeedX() > 0){
                 player.setSpeedX(player.getSpeedX() - player.getAcceleration());
             }else if(player.getSpeedX() < 0){
-                player.setSpeedX(player.getSpeedX() + player.getAcceleration());
+               player.setSpeedX(player.getSpeedX() + player.getAcceleration());
             }
         }
 
@@ -127,8 +138,8 @@ public class GameController {
             if(player.getSpeedY() > 0){
                 player.setSpeedY(player.getSpeedY() - player.getAcceleration());
             }else if(player.getSpeedY() < 0){
-                player.setSpeedY(player.getSpeedY() + player.getAcceleration());
-            }
+               player.setSpeedY(player.getSpeedY() + player.getAcceleration());
+           }
         }
 
         player.setPositionX(player.getPositionX() + player.getSpeedX());
@@ -154,6 +165,41 @@ public class GameController {
         if(player.getPositionY() < 0){
             player.setPositionY(0);
             player.setSpeedY(0);
+        }
+    }
+
+    private void moveEnemies(){
+        for(int i = 0; i < enemies.size(); ++i){
+            if(player.getPositionX() - enemies.get(i).getPositionX() > 0 ){
+                enemies.get(i).setSpeedX(enemies.get(i).getSpeedX() + enemies.get(i).getAcceleration());
+            } else {
+                enemies.get(i).setSpeedX(enemies.get(i).getSpeedX() - enemies.get(i).getAcceleration());
+            }
+
+            if(player.getPositionY() - enemies.get(i).getPositionY() > 0 ){
+                enemies.get(i).setSpeedY(enemies.get(i).getSpeedY() + enemies.get(i).getAcceleration());
+            } else {
+                enemies.get(i).setSpeedY(enemies.get(i).getSpeedY() - enemies.get(i).getAcceleration());
+            }
+
+            if(enemies.get(i).getSpeedX() > enemies.get(i).getMaxSpeed()){
+                enemies.get(i).setSpeedX(enemies.get(i).getMaxSpeed());
+            }
+
+            if(enemies.get(i).getSpeedX() < -enemies.get(i).getMaxSpeed()){
+                enemies.get(i).setSpeedX( - enemies.get(i).getMaxSpeed());
+            }
+
+            if(enemies.get(i).getSpeedY() > enemies.get(i).getMaxSpeed()){
+                enemies.get(i).setSpeedY(enemies.get(i).getMaxSpeed());
+            }
+
+            if(enemies.get(i).getSpeedY() < -enemies.get(i).getMaxSpeed()){
+                enemies.get(i).setSpeedY( - enemies.get(i).getMaxSpeed());
+            }
+
+            enemies.get(i).setPositionX(enemies.get(i).getPositionX() + enemies.get(i).getSpeedX());
+            enemies.get(i).setPositionY(enemies.get(i).getPositionY() + enemies.get(i).getSpeedY());
         }
     }
 
@@ -266,6 +312,54 @@ public class GameController {
         }
         if(bulletRemoved == true){
             handleEnemiesBulletsCollisions();
+        }
+    }
+
+    private void handleEnemiesCollisions(){
+        for(int i = 0; i < enemies.size() - 1 ; i++){
+            for(int a = 0; a < enemies.size(); a++){
+                if(a != i && calculateDistance(enemies.get(i), enemies.get(a)) < 0){
+
+                    if(enemies.get(i).getPositionX() <= enemies.get(a).getPositionX()){
+                        enemies.get(i).setSpeedX(-enemies.get(i).getMaxSpeed());
+                        enemies.get(a).setSpeedX(enemies.get(a).getMaxSpeed());
+                    }else{
+                        enemies.get(i).setSpeedX(enemies.get(i).getMaxSpeed());
+                        enemies.get(a).setSpeedX(-enemies.get(a).getMaxSpeed());
+                    }
+
+                    if(enemies.get(i).getPositionY() <= enemies.get(a).getPositionY()){
+                        enemies.get(i).setSpeedY(-enemies.get(i).getMaxSpeed());
+                        enemies.get(a).setSpeedY(enemies.get(a).getMaxSpeed());
+                    }else{
+                        enemies.get(i).setSpeedY(enemies.get(i).getMaxSpeed());
+                        enemies.get(a).setSpeedY(-enemies.get(a).getMaxSpeed());
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void handlePlayersCollision(){
+        for(int a = 0; a < enemies.size(); ++a){
+            if(calculateDistance(player, enemies.get(a)) < 0) {
+                if (player.getPositionX() <= enemies.get(a).getPositionX()) {
+                    player.setSpeedX(player.getMaxSpeed());
+                    enemies.get(a).setSpeedX(enemies.get(a).getMaxSpeed());
+                } else {
+                    player.setSpeedX(player.getMaxSpeed());
+                    enemies.get(a).setSpeedX(-enemies.get(a).getMaxSpeed());
+                }
+
+                if (player.getPositionY() <= enemies.get(a).getPositionY()) {
+                    player.setSpeedY(-player.getMaxSpeed());
+                    enemies.get(a).setSpeedY(enemies.get(a).getMaxSpeed());
+                } else {
+                    player.setSpeedY(player.getMaxSpeed());
+                    enemies.get(a).setSpeedY(-enemies.get(a).getMaxSpeed());
+                }
+            }
         }
     }
 
