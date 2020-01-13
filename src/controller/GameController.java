@@ -3,8 +3,11 @@ package controller;
 import javafx.animation.AnimationTimer;
 import model.Creature;
 import model.Bullet;
+import model.Doors;
+import model.LocationsInfoLabel;
 import view.GameViewManager;
 
+import javax.xml.stream.Location;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +20,15 @@ public class GameController {
     private double playersBulletCoolDown;
     private double enemiesBulletCoolDown;
 
+    private int currentLocation;
+    private int currentRoom;
+
+    private Doors doors;
+
     private List<Creature> enemies;
     private List<Bullet> enemiesBullets;
+
+    private LocationsInfoLabel infoLabel;
 
 
     public GameController(GameViewManager viewManager){
@@ -26,14 +36,20 @@ public class GameController {
         this.playersBullets = new ArrayList<>();
         createGameLoop();
         player = new Creature();
-        enemies = new ArrayList<>();
+        infoLabel = new LocationsInfoLabel(1);
+        enemies = infoLabel.getRoomOneCreatures();
+
+        doors = infoLabel.getDoors(0);
+
+        for(int i = 0; i < enemies.size(); ++i){
+            viewManager.createEnemy(enemies.get(i).getPositionX(), enemies.get(i).getPositionX());
+        }
+
         enemiesBullets = new ArrayList<>();
-        enemies.add(new Creature(100,100,4,3,0.5,50, 64,64, 28 , 1));
-        viewManager.createEnemy(100,100);
-        enemies.add(new Creature(600,200,4,3,0.5,50, 64,64, 28, 1 ));
-        viewManager.createEnemy(600,200);
         playersBulletCoolDown = 0;
         enemiesBulletCoolDown = 50;
+        currentLocation = 1;
+        currentRoom = 1;
     }
 
     private void createGameLoop(){
@@ -380,6 +396,10 @@ public class GameController {
         }
         enemiesBullets.add(new Bullet(enemy.getPositionX(), enemy.getPositionY(), speedX, speedY, enemy.getAttack()));
         viewManager.createEnemyBullet(enemy.getPositionX(), enemy.getPositionY(), enemiesBullets.size());
+    }
+
+    private void createDoors(){
+
     }
 }
 
