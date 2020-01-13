@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 
 public class SaveController {
@@ -30,6 +31,15 @@ public class SaveController {
             saving.close();
     }
 
+    public void loadPlayer(Player loadedPlayer) {
+        File saveFile = new File("C:\\Users\\Arcangelo\\IdeaProjects\\Project\\src\\SavedPlayer.txt");
+        if (saveFile.exists()) {
+            Scanner loading = new Scanner("C:\\Users\\Arcangelo\\IdeaProjects\\Project\\src\\SavedPlayer.txt");
 
+            //loadedPlayer.setMaxSpeed() = loading.nextLine();
+            //loadedPlayer.setAcceleration() = loading.nextLine();
+
+        }
+    }
 
 }

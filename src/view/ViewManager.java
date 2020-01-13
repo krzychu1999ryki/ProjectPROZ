@@ -90,6 +90,7 @@ public class ViewManager {
         loadGame.setOnAction(newGame -> {
             try {
                 setCharacterScreen();
+                //saveController.loadPlayer(loadedPlayer);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
