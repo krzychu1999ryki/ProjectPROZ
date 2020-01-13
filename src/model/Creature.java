@@ -81,6 +81,4 @@ public class Creature {
     public double getBulletCoolDown() {
         return bulletCoolDown;
     }
-
-
 }
