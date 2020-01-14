@@ -334,9 +334,11 @@ public class GameController {
         for(int i = 0; i < enemiesBullets.size(); i++){
                 if(calculateDistance(player, enemiesBullets.get(i)) <= 0){
                     player.setHitPoints(player.getHitPoints() - enemiesBullets.get(i).getDamage());
+                    viewManager.removePlayersLife(enemiesBullets.get(i).getDamage());
                     enemiesBullets.remove(i);
                     viewManager.deleteEnemyBullet(i);
                     if(player.getHitPoints() <= 0){
+                        gameTimer.stop();
                         viewManager.getGameStage().close();
                     }
                     bulletRemoved = true;
@@ -436,8 +438,8 @@ public class GameController {
         }
     }
 
-    private void createDoors(){
-
+    public double getPlayersHitPoints(){
+        return player.getHitPoints();
     }
 }
 

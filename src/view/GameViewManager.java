@@ -23,6 +23,7 @@ public class GameViewManager {
     private ImageView doors;
     private List<ImageView> playersBulletsImages;
     private List<ImageView> enemiesImages;
+    private List<ImageView> playersLife;
     private List<ImageView> enemiesBulletsImages;
 
     private GameController gameController;
@@ -33,6 +34,7 @@ public class GameViewManager {
     private static final String ENEMY_BULLET = "view/resources/meteorGrey_tiny1.png";
     private static final String DOORS_CLOSED = "view/resources/rpgTile189.png";
     private static final String DOORS_OPENED = "view/resources/rpgTile169.png";
+    private static final String PLAYERS_LIFE = "view/resources/powerupGreen_shield.png";
 
     private static final int GAME_WIDTH = 800;
     private static final int GAME_HEIGHT = 600;
@@ -55,6 +57,7 @@ public class GameViewManager {
         doors = new ImageView(DOORS_OPENED);
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
         gameStage = new Stage();
+        playersLife = new ArrayList<>();
         playersBulletsImages = new ArrayList<>();
         enemiesBulletsImages = new ArrayList<>();
         enemiesImages = new ArrayList<>();
@@ -64,6 +67,7 @@ public class GameViewManager {
         createGameController(loadedPlayer, menuManager);
         gameStage.show();
         setBackground(BACKGROUND_1);
+        createPlayersLife();
     }
 
     private void createPlayer() {
@@ -200,6 +204,30 @@ public class GameViewManager {
         gamePane.getChildren().remove(doors);
     }
 
+    public void createPlayersLife(){
+        int x = GAME_WIDTH - 44;
+        int y = 10;
+        for(int i = 0; i < gameController.getPlayersHitPoints(); ++i){
+            playersLife.add(new ImageView(PLAYERS_LIFE));
+            playersLife.get(i).setLayoutX(x);
+            playersLife.get(i).setLayoutY(y);
+            gamePane.getChildren().add(playersLife.get(i));
+            x -= 35;
+            if(i % 10 == 9){
+                y += 35;
+                x += 350;
+            }
+        }
+    }
+
+    public void removePlayersLife(double damage){
+        for(int i=0; i < damage; i++ ){
+            gamePane.getChildren().remove(playersLife.get(playersLife.size() - 1));
+            playersLife.remove(playersLife.size() - 1);
+        }
+    }
+
+
     public boolean getLeftPressed() {
         return isLeftKeyPressed;
     }
@@ -251,4 +279,6 @@ public class GameViewManager {
     public Stage getGameStage() {
         return gameStage;
     }
+
+
 }

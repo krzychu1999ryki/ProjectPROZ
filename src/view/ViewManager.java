@@ -203,6 +203,7 @@ public class ViewManager {
         addHp.setOnMouseClicked(mouseEvent -> {
             if(loadedPlayer.getSkillPoints() > 0) {
                 loadedPlayer.setMaxHitPoints(loadedPlayer.getMaxHitPoints() + 1);
+                loadedPlayer.setHitPoints(loadedPlayer.getMaxHitPoints());
                 loadedPlayer.setSkillPoints(loadedPlayer.getSkillPoints() - 1);
                 try {
                     setCharacterScreen();
