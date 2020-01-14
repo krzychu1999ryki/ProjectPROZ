@@ -35,6 +35,7 @@ public class GameViewManager {
     private static final String DOORS_CLOSED = "view/resources/rpgTile189.png";
     private static final String DOORS_OPENED = "view/resources/rpgTile169.png";
     private static final String PLAYERS_LIFE = "view/resources/powerupGreen_shield.png";
+    private static final String ENEMY_1 = "view/resources/FlameDemon.png";
 
     private static final int GAME_WIDTH = 800;
     private static final int GAME_HEIGHT = 600;
@@ -52,7 +53,7 @@ public class GameViewManager {
     private boolean isDKeyPressed;
 
 
-    public GameViewManager(Creature loadedPlayer, ViewManager menuManager) {
+    public GameViewManager(Creature loadedPlayer, ViewManager menuManager, int location) {
         gamePane = new AnchorPane();
         doors = new ImageView(DOORS_OPENED);
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
@@ -64,7 +65,7 @@ public class GameViewManager {
         createPlayer();
         gameStage.setScene(gameScene);
         createKeysListeners();
-        createGameController(loadedPlayer, menuManager);
+        createGameController(loadedPlayer, menuManager, location);
         gameStage.show();
         setBackground(BACKGROUND_1);
         createPlayersLife();
@@ -77,8 +78,8 @@ public class GameViewManager {
         gamePane.getChildren().add(playerImage);
     }
 
-    private void createGameController(Creature loadedPlayer, ViewManager menuManager) {
-        gameController = new GameController(this, loadedPlayer, menuManager);
+    private void createGameController(Creature loadedPlayer, ViewManager menuManager, int location) {
+        gameController = new GameController(this, loadedPlayer, menuManager, location);
     }
 
     private void createKeysListeners() {
@@ -182,7 +183,7 @@ public class GameViewManager {
     }
 
     public void createEnemy(double x, double y) {
-        ImageView newEnemy = new ImageView(PLAYER_STOP);
+        ImageView newEnemy = new ImageView(ENEMY_1);
         newEnemy.setLayoutX(x);
         newEnemy.setLayoutY(y);
         enemiesImages.add(newEnemy);
@@ -222,8 +223,10 @@ public class GameViewManager {
 
     public void removePlayersLife(double damage){
         for(int i=0; i < damage; i++ ){
-            gamePane.getChildren().remove(playersLife.get(playersLife.size() - 1));
-            playersLife.remove(playersLife.size() - 1);
+            if( playersLife.size() > 0) {
+                gamePane.getChildren().remove(playersLife.get(playersLife.size() - 1));
+                playersLife.remove(playersLife.size() - 1);
+            }
         }
     }
 

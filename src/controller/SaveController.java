@@ -42,6 +42,7 @@ public class SaveController {
             loadedPlayer.setAttack(Double.parseDouble(loading.nextLine()));
             loadedPlayer.setMaxSpeed(Double.parseDouble(loading.nextLine()));
             loadedPlayer.setMaxHitPoints(Double.parseDouble(loading.nextLine()));
+            loadedPlayer.setHitPoints(loadedPlayer.getMaxHitPoints());
             loadedPlayer.setSkillPoints(Integer.parseInt(loading.nextLine()));
 
         }

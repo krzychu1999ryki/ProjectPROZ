@@ -34,12 +34,13 @@ public class GameController {
     private LocationsInfoLabel infoLabel;
 
 
-    public GameController(GameViewManager viewManager, Creature loadedPlayer, ViewManager menuManager){
+    public GameController(GameViewManager viewManager, Creature loadedPlayer, ViewManager menuManager, int location){
+        currentLocation = location;
         this.viewManager = viewManager;
         this.playersBullets = new ArrayList<>();
         this.menuManager = menuManager;
         createGameLoop();
-        infoLabel = new LocationsInfoLabel(1);
+        infoLabel = new LocationsInfoLabel(currentLocation);
         enemies = infoLabel.getRoomCreatures(1);
         player = loadedPlayer;
 
@@ -52,7 +53,6 @@ public class GameController {
         enemiesBullets = new ArrayList<>();
         playersBulletCoolDown = 0;
         enemiesBulletCoolDown = 50;
-        currentLocation = 1;
         currentRoom = 1;
     }
 
@@ -430,6 +430,12 @@ public class GameController {
                 viewManager.getGameStage().close();
                 if(currentLocation == 1){
                     menuManager.getLoadedPlayer().setSkillPoints(menuManager.getLoadedPlayer().getSkillPoints() + 1);
+                    gameTimer.stop();
+                }else if(currentLocation == 2){
+                    menuManager.getLoadedPlayer().setSkillPoints(menuManager.getLoadedPlayer().getSkillPoints() + 2);
+                    gameTimer.stop();
+                }else if(currentLocation == 3){
+                    menuManager.getLoadedPlayer().setSkillPoints((menuManager.getLoadedPlayer().getSkillPoints() + 5));
                     gameTimer.stop();
                 }
 

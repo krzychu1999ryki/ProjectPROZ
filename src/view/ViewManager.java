@@ -328,16 +328,35 @@ public class ViewManager {
                         loadedPlayer.getHitPoints(), loadedPlayer.getMaxSpeed(), loadedPlayer.getAcceleration(),
                         loadedPlayer.getBulletCoolDown(), loadedPlayer.getSizeX(), loadedPlayer.getSizeY(),
                         loadedPlayer.getRadius(), loadedPlayer.getAttack());
-                GameViewManager gameManager = new GameViewManager(clone, this);
+                GameViewManager gameManager = new GameViewManager(clone, this, 1);
 
-                //mainStage.close();
             } catch(Exception e) {
                 e.printStackTrace();
             } });
 
-        level2.setOnAction(ActionEvent -> { int i = 2; });
+        level2.setOnAction(ActionEvent -> {
+            try{
+                Creature clone = new Creature(loadedPlayer.getPositionX(), loadedPlayer.getPositionY(),
+                        loadedPlayer.getHitPoints(), loadedPlayer.getMaxSpeed(), loadedPlayer.getAcceleration(),
+                        loadedPlayer.getBulletCoolDown(), loadedPlayer.getSizeX(), loadedPlayer.getSizeY(),
+                        loadedPlayer.getRadius(), loadedPlayer.getAttack());
+                GameViewManager gameManager = new GameViewManager(clone, this, 2);
 
-        level3.setOnAction(ActionEvent -> { int i = 3; });
+            } catch(Exception e) {
+                e.printStackTrace();
+            } });
+
+        level3.setOnAction(ActionEvent -> {
+            try{
+                Creature clone = new Creature(loadedPlayer.getPositionX(), loadedPlayer.getPositionY(),
+                        loadedPlayer.getHitPoints(), loadedPlayer.getMaxSpeed(), loadedPlayer.getAcceleration(),
+                        loadedPlayer.getBulletCoolDown(), loadedPlayer.getSizeX(), loadedPlayer.getSizeY(),
+                        loadedPlayer.getRadius(), loadedPlayer.getAttack());
+                GameViewManager gameManager = new GameViewManager(clone, this, 3);
+
+            } catch(Exception e) {
+                e.printStackTrace();
+        } });
     }
 
     public void setSkillPoints() {
