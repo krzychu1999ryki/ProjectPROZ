@@ -6,14 +6,17 @@ import model.Bullet;
 import model.Doors;
 import model.LocationsInfoLabel;
 import view.GameViewManager;
+import view.ViewManager;
 
 import javax.xml.stream.Location;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
     private AnimationTimer gameTimer;
     private GameViewManager viewManager;
+    private ViewManager menuManager;
 
     private Creature player;
     private List<Bullet> playersBullets;
@@ -31,13 +34,14 @@ public class GameController {
     private LocationsInfoLabel infoLabel;
 
 
-    public GameController(GameViewManager viewManager){
+    public GameController(GameViewManager viewManager, Creature loadedPlayer, ViewManager menuManager){
         this.viewManager = viewManager;
         this.playersBullets = new ArrayList<>();
+        this.menuManager = menuManager;
         createGameLoop();
         infoLabel = new LocationsInfoLabel(1);
         enemies = infoLabel.getRoomCreatures(1);
-        player = new Creature();
+        player = loadedPlayer;
 
         doors = infoLabel.getDoors(0);
 
@@ -410,7 +414,7 @@ public class GameController {
         viewManager.createEnemyBullet(enemy.getPositionX(), enemy.getPositionY(), enemiesBullets.size());
     }
 
-    private void checkDoorsEntered(){
+    private void checkDoorsEntered() {
         if(calculateDistance(player, doors) < 0){
             if(currentRoom <= 2){
                 currentRoom++;
@@ -422,6 +426,12 @@ public class GameController {
                 viewManager.deleteDoors();
             }else if(currentRoom == 3){
                 viewManager.getGameStage().close();
+                if(currentLocation == 1){
+                    menuManager.getLoadedPlayer().setSkillPoints(menuManager.getLoadedPlayer().getSkillPoints() + 1);
+                    gameTimer.stop();
+                }
+
+                menuManager.setSkillPoints();
             }
         }
     }

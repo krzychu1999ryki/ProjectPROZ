@@ -9,6 +9,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import model.Creature;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,11 +50,7 @@ public class GameViewManager {
     private boolean isDKeyPressed;
 
 
-    public GameViewManager() {
-        initializeGame();
-    }
-
-    private void initializeGame() {
+    public GameViewManager(Creature loadedPlayer, ViewManager menuManager) {
         gamePane = new AnchorPane();
         doors = new ImageView(DOORS_OPENED);
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
@@ -64,7 +61,7 @@ public class GameViewManager {
         createPlayer();
         gameStage.setScene(gameScene);
         createKeysListeners();
-        createGameController();
+        createGameController(loadedPlayer, menuManager);
         gameStage.show();
         setBackground(BACKGROUND_1);
     }
@@ -76,8 +73,8 @@ public class GameViewManager {
         gamePane.getChildren().add(playerImage);
     }
 
-    private void createGameController() {
-        gameController = new GameController(this);
+    private void createGameController(Creature loadedPlayer, ViewManager menuManager) {
+        gameController = new GameController(this, loadedPlayer, menuManager);
     }
 
     private void createKeysListeners() {

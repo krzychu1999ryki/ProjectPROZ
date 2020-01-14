@@ -6,6 +6,8 @@ import model.Creature;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 
@@ -13,29 +15,34 @@ public class SaveController {
 
 
     public void savePlayer(Creature loadedPlayer) throws IOException {
-            File saveFile = new File("C:\\Users\\Arcangelo\\IdeaProjects\\Project\\src\\SavedPlayer.txt");
-            if (!saveFile.exists()) {
-                try {
-                    saveFile.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        File file = new File("C:\\Users\\krzyc\\IdeaProjects\\Project\\SavedPlayer.txt");
+        file.delete();
 
-            PrintWriter saving = new PrintWriter("C:\\Users\\Arcangelo\\IdeaProjects\\Project\\src\\SavedPlayer.txt");
+        File saveFile = new File("SavedPlayer.txt");
+        saveFile.createNewFile();
 
-            saving.println(loadedPlayer.getMaxSpeed());
-            saving.println(loadedPlayer.getAcceleration());
-            saving.close();
+        PrintWriter saving = new PrintWriter("SavedPlayer.txt");
+
+        saving.println(loadedPlayer.getAttack());
+        saving.println(loadedPlayer.getMaxSpeed());
+        saving.println(loadedPlayer.getMaxHitPoints());
+        saving.println(loadedPlayer.getSkillPoints());
+        saving.close();
     }
 
-    public void loadPlayer(Creature loadedPlayer) {
-        File saveFile = new File("C:\\Users\\Arcangelo\\IdeaProjects\\Project\\src\\SavedPlayer.txt");
+    public void loadPlayer(Creature loadedPlayer) throws IOException {
+        File saveFile = new File("SavedPlayer.txt");
         if (saveFile.exists()) {
-            Scanner loading = new Scanner("C:\\Users\\Arcangelo\\IdeaProjects\\Project\\src\\SavedPlayer.txt");
+            Path path = Paths.get("SavedPlayer.txt");
+            Scanner loading = new Scanner(path);
 
-            //loadedPlayer.setMaxSpeed() = loading.nextLine();
-            //loadedPlayer.setAcceleration() = loading.nextLine();
+            //String attack1 = loading.nextLine();
+            //System.out.println(attack1);
+
+            loadedPlayer.setAttack(Double.parseDouble(loading.nextLine()));
+            loadedPlayer.setMaxSpeed(Double.parseDouble(loading.nextLine()));
+            loadedPlayer.setMaxHitPoints(Double.parseDouble(loading.nextLine()));
+            loadedPlayer.setSkillPoints(Integer.parseInt(loading.nextLine()));
 
         }
     }
