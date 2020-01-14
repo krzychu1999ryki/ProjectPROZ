@@ -6,14 +6,17 @@ import model.Bullet;
 import model.Doors;
 import model.LocationsInfoLabel;
 import view.GameViewManager;
+import view.ViewManager;
 
 import javax.xml.stream.Location;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
     private AnimationTimer gameTimer;
     private GameViewManager viewManager;
+    private ViewManager menuManager;
 
     private Creature player;
     private List<Bullet> playersBullets;
@@ -31,13 +34,15 @@ public class GameController {
     private LocationsInfoLabel infoLabel;
 
 
-    public GameController(GameViewManager viewManager){
+    public GameController(GameViewManager viewManager, Creature loadedPlayer, ViewManager menuManager, int location){
+        currentLocation = location;
         this.viewManager = viewManager;
         this.playersBullets = new ArrayList<>();
+        this.menuManager = menuManager;
         createGameLoop();
-        infoLabel = new LocationsInfoLabel(1);
+        infoLabel = new LocationsInfoLabel(currentLocation);
         enemies = infoLabel.getRoomCreatures(1);
-        player = new Creature();
+        player = loadedPlayer;
 
         doors = infoLabel.getDoors(0);
 
@@ -48,7 +53,6 @@ public class GameController {
         enemiesBullets = new ArrayList<>();
         playersBulletCoolDown = 0;
         enemiesBulletCoolDown = 50;
-        currentLocation = 1;
         currentRoom = 1;
     }
 
@@ -106,7 +110,6 @@ public class GameController {
                 }
 
                 if(enemies.size() == 0 && doors.isOpen() == false){
-                    System.out.println("tworze drzwi");
                     viewManager.createDoors(doors.getPositionX(), doors.getPositionY());
                     doors.setOpen(true);
                 }
@@ -312,7 +315,6 @@ public class GameController {
                     playersBullets.remove(i);
                     viewManager.deletePlayersBullet(i);
                     enemies.get(a).setHitPoints(enemies.get(a).getHitPoints() - player.getAttack());
-                    System.out.println(enemies.get(a).getHitPoints());
                     if(enemies.get(a).getHitPoints() <= 0){
                         enemies.remove(a);
                         viewManager.deleteEnemy(a);
@@ -332,10 +334,11 @@ public class GameController {
         for(int i = 0; i < enemiesBullets.size(); i++){
                 if(calculateDistance(player, enemiesBullets.get(i)) <= 0){
                     player.setHitPoints(player.getHitPoints() - enemiesBullets.get(i).getDamage());
+                    viewManager.removePlayersLife(enemiesBullets.get(i).getDamage());
                     enemiesBullets.remove(i);
                     viewManager.deleteEnemyBullet(i);
-                    System.out.println(player.getHitPoints());
                     if(player.getHitPoints() <= 0){
+                        gameTimer.stop();
                         viewManager.getGameStage().close();
                     }
                     bulletRemoved = true;
@@ -413,7 +416,7 @@ public class GameController {
         viewManager.createEnemyBullet(enemy.getPositionX(), enemy.getPositionY(), enemiesBullets.size());
     }
 
-    private void checkDoorsEntered(){
+    private void checkDoorsEntered() {
         if(calculateDistance(player, doors) < 0){
             if(currentRoom <= 2){
                 currentRoom++;
@@ -425,12 +428,24 @@ public class GameController {
                 viewManager.deleteDoors();
             }else if(currentRoom == 3){
                 viewManager.getGameStage().close();
+                if(currentLocation == 1){
+                    menuManager.getLoadedPlayer().setSkillPoints(menuManager.getLoadedPlayer().getSkillPoints() + 1);
+                    gameTimer.stop();
+                }else if(currentLocation == 2){
+                    menuManager.getLoadedPlayer().setSkillPoints(menuManager.getLoadedPlayer().getSkillPoints() + 2);
+                    gameTimer.stop();
+                }else if(currentLocation == 3){
+                    menuManager.getLoadedPlayer().setSkillPoints((menuManager.getLoadedPlayer().getSkillPoints() + 5));
+                    gameTimer.stop();
+                }
+
+                menuManager.setSkillPoints();
             }
         }
     }
 
-    private void createDoors(){
-
+    public double getPlayersHitPoints(){
+        return player.getHitPoints();
     }
 }
 

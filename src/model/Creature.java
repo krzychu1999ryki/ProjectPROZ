@@ -14,6 +14,7 @@ public class Creature {
     private double sizeY;
     private double radius;
     private double attack;
+    private int skillPoints;
 
     private final static double BULLET_SPEED = 10;
 
@@ -31,6 +32,7 @@ public class Creature {
         sizeX = 64;
         sizeY = 64;
         radius = 28;
+        skillPoints = 0;
     }
 
     public Creature(double x, double y, double hp, double maxSpeed, double acceleration, double bulletCoolDown,
@@ -48,6 +50,25 @@ public class Creature {
         this.sizeY = sizeY;
         this.radius = radius;
         this.attack = attack;
+        skillPoints = 0;
+    }
+
+    public Creature(double x, double y, double hp, double maxSpeed, double acceleration, double bulletCoolDown,
+                    double sizeX, double sizeY, double radius, double attack, int skillPoints){
+        this.positionX = x;
+        this.positionY = y;
+        this.hitPoints = hp;
+        this.maxHitPoints = hp;
+        speedX = 0;
+        speedY = 0;
+        this.maxSpeed = maxSpeed;
+        this.acceleration = acceleration;
+        this.bulletCoolDown = bulletCoolDown;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.radius = radius;
+        this.attack = attack;
+        this.skillPoints = skillPoints;
     }
 
     public void setPositionX(double x) {
@@ -129,4 +150,14 @@ public class Creature {
     public double getMaxHitPoints() { return maxHitPoints; }
 
     public void setMaxHitPoints(double maxHitPoints) { this.maxHitPoints = maxHitPoints; }
+
+    public void setMaxSpeed(double maxSpeed) { this.maxSpeed = maxSpeed; }
+
+    public int getSkillPoints() {
+        return skillPoints;
+    }
+
+    public void setSkillPoints(int skillPoints) {
+        this.skillPoints = skillPoints;
+    }
 }

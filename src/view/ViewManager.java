@@ -37,6 +37,9 @@ public class ViewManager {
 
     private SaveController saveController;
     private Creature loadedPlayer;
+    private boolean loaded = false;
+
+    private Text skillPoints;
 
     public ViewManager() throws FileNotFoundException {
         this.loadedPlayer = new Creature();
@@ -74,6 +77,12 @@ public class ViewManager {
         mainPane.getChildren().add(newGame);
 
         newGame.setOnAction(newGame -> {
+            loaded = false;
+            loadedPlayer.setAttack(1);
+            loadedPlayer.setMaxSpeed(8);
+            loadedPlayer.setMaxHitPoints(10);
+            loadedPlayer.setSkillPoints(0);
+
             try {
                 setCharacterScreen();
             } catch (FileNotFoundException e) {
@@ -89,10 +98,12 @@ public class ViewManager {
         mainPane.getChildren().add(loadGame);
 
         loadGame.setOnAction(newGame -> {
+            loaded = true;
+
             try {
+                saveController.loadPlayer(loadedPlayer);
                 setCharacterScreen();
-                //saveController.loadPlayer(loadedPlayer);
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
@@ -122,7 +133,7 @@ public class ViewManager {
         quitButton.setOnAction(actionEvent -> mainStage.close());
     }
 
-    void createBackButton(AnchorPane pane) throws FileNotFoundException {
+    private void createBackButton(AnchorPane pane) throws FileNotFoundException {
         MenuButton backButton = new MenuButton("Back", BUTTON_RELEASED_STYLE, BUTTON_PRESSED_STYLE, FONT_PATH2);
         backButton.setLayoutX(10);
         backButton.setLayoutY(540);
@@ -164,10 +175,46 @@ public class ViewManager {
         imageView.setOnMouseExited(mouseEvent -> imageView.setEffect(null));
     }
 
+    private void increaseStat(Creature loadedPlayer, ImageView addAttack, ImageView addSpeed, ImageView addHp) {
+        addAttack.setOnMouseClicked(mouseEvent -> {
+            if(loadedPlayer.getSkillPoints() > 0) {
+                loadedPlayer.setAttack(loadedPlayer.getAttack() + 1);
+                loadedPlayer.setSkillPoints(loadedPlayer.getSkillPoints() - 1);
+                try {
+                    setCharacterScreen();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
+        addSpeed.setOnMouseClicked(mouseEvent -> {
+            if(loadedPlayer.getSkillPoints() > 0) {
+                loadedPlayer.setMaxSpeed(loadedPlayer.getMaxSpeed() + 1);
+                loadedPlayer.setSkillPoints(loadedPlayer.getSkillPoints() - 1);
+                try {
+                    setCharacterScreen();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
+        addHp.setOnMouseClicked(mouseEvent -> {
+            if(loadedPlayer.getSkillPoints() > 0) {
+                loadedPlayer.setMaxHitPoints(loadedPlayer.getMaxHitPoints() + 1);
+                loadedPlayer.setHitPoints(loadedPlayer.getMaxHitPoints());
+                loadedPlayer.setSkillPoints(loadedPlayer.getSkillPoints() - 1);
+                try {
+                    setCharacterScreen();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-    private void setCharacterScreen() throws FileNotFoundException {
+    public void setCharacterScreen() throws FileNotFoundException {
         mainPane = new AnchorPane();
         Text title1 = new Text();
         Text title2 = new Text();
@@ -188,6 +235,7 @@ public class ViewManager {
         MenuButton level1 = createPlayButton(mainPane, 600, 200);
         MenuButton level2 = createPlayButton(mainPane, 600, 330);
         MenuButton level3 = createPlayButton(mainPane, 600, 460);
+
         MenuButton saveButton = createSaveButton(mainPane);
 
         Text L1 = new Text();
@@ -217,15 +265,19 @@ public class ViewManager {
 
         mainPane.getChildren().add(character);
 
-        int attack = 1;
-        int speed = 4;
-        int hp = 6;
+        double attack;
+        double speed;
+        double hp;
 
-        Text skillPoints = new Text();
+        attack = loadedPlayer.getAttack();
+        speed = loadedPlayer.getMaxSpeed();
+        hp = loadedPlayer.getMaxHitPoints();
+
+        skillPoints = new Text();
         Text attackStat = new Text();
         Text speedStat = new Text();
         Text hitPoints = new Text();
-        skillPoints.setText("Skill Points:   3");
+        setSkillPoints();
         attackStat.setText("Attack:   " + attack);
         speedStat.setText("Speed:    " + speed);
         hitPoints.setText("HP:        " + hp);
@@ -244,11 +296,11 @@ public class ViewManager {
         hitPoints.setLayoutY(420);
 
         ImageView addAttack = new ImageView("view/resources/cursorSword_silver.png");
-        setStatButtons(mainPane, addAttack, 300, 255);
+        setStatButtons(mainPane, addAttack, 320, 255);
         ImageView addSpeed = new ImageView("view/resources/cursorSword_silver.png");
-        setStatButtons(mainPane, addSpeed, 300, 325);
+        setStatButtons(mainPane, addSpeed, 320, 325);
         ImageView addHp = new ImageView("view/resources/cursorSword_silver.png");
-        setStatButtons(mainPane, addHp, 300, 395);
+        setStatButtons(mainPane, addHp, 320, 395);
 
         mainPane.getChildren().add(skillPoints);
         mainPane.getChildren().add(attackStat);
@@ -260,6 +312,8 @@ public class ViewManager {
 
         createBackground();
 
+        increaseStat(loadedPlayer, addAttack, addSpeed, addHp);
+
         saveButton.setOnAction(actionEvent -> {
             try {
                 saveController.savePlayer(loadedPlayer);
@@ -270,16 +324,43 @@ public class ViewManager {
 
         level1.setOnAction(actionEvent -> {
             try{
-                GameViewManager gameManager = new GameViewManager();
+                Creature clone = new Creature(loadedPlayer.getPositionX(), loadedPlayer.getPositionY(),
+                        loadedPlayer.getHitPoints(), loadedPlayer.getMaxSpeed(), loadedPlayer.getAcceleration(),
+                        loadedPlayer.getBulletCoolDown(), loadedPlayer.getSizeX(), loadedPlayer.getSizeY(),
+                        loadedPlayer.getRadius(), loadedPlayer.getAttack());
+                GameViewManager gameManager = new GameViewManager(clone, this, 1);
 
-                //mainStage.close();
             } catch(Exception e) {
                 e.printStackTrace();
             } });
 
-        level2.setOnAction(ActionEvent -> { int i = 2; });
+        level2.setOnAction(ActionEvent -> {
+            try{
+                Creature clone = new Creature(loadedPlayer.getPositionX(), loadedPlayer.getPositionY(),
+                        loadedPlayer.getHitPoints(), loadedPlayer.getMaxSpeed(), loadedPlayer.getAcceleration(),
+                        loadedPlayer.getBulletCoolDown(), loadedPlayer.getSizeX(), loadedPlayer.getSizeY(),
+                        loadedPlayer.getRadius(), loadedPlayer.getAttack());
+                GameViewManager gameManager = new GameViewManager(clone, this, 2);
 
-        level3.setOnAction(ActionEvent -> { int i = 3; });
+            } catch(Exception e) {
+                e.printStackTrace();
+            } });
+
+        level3.setOnAction(ActionEvent -> {
+            try{
+                Creature clone = new Creature(loadedPlayer.getPositionX(), loadedPlayer.getPositionY(),
+                        loadedPlayer.getHitPoints(), loadedPlayer.getMaxSpeed(), loadedPlayer.getAcceleration(),
+                        loadedPlayer.getBulletCoolDown(), loadedPlayer.getSizeX(), loadedPlayer.getSizeY(),
+                        loadedPlayer.getRadius(), loadedPlayer.getAttack());
+                GameViewManager gameManager = new GameViewManager(clone, this, 3);
+
+            } catch(Exception e) {
+                e.printStackTrace();
+        } });
+    }
+
+    public void setSkillPoints() {
+        skillPoints.setText("Skill Points:   " + loadedPlayer.getSkillPoints());
     }
 
     private void setHelpScreen() throws FileNotFoundException {
@@ -338,4 +419,7 @@ public class ViewManager {
         mainPane.getChildren().add(logo);
     }
 
+    public Creature getLoadedPlayer() {
+        return loadedPlayer;
+    }
 }
